@@ -15,6 +15,7 @@ namespace bieda_simsy
         private int _money;
         private int _happiness;
         private int _hungry;
+        private bool _isAlive;
 
         public PlayerStats()
         {
@@ -23,6 +24,7 @@ namespace bieda_simsy
             _money = 10;
             _happiness = 100;
             _hungry = 100;
+            _isAlive = true;
         }
 
         protected string SetName()
@@ -96,6 +98,11 @@ namespace bieda_simsy
             _happiness = BuyHappiness(_happiness);
         }
 
+        protected bool Dead()
+        {
+            return isDead();
+        }
 
     }
+
 }

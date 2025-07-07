@@ -68,10 +68,19 @@ namespace bieda_simsy
             string choice;
 
             do
+
             {
                 ShowPlayerOptionsMenu();
 
                 Health();
+
+                if ( Dead() == true)
+                {
+                    Console.WriteLine("Your pupil is dead");
+                    break;
+
+                }
+
 
                 choice = Console.ReadLine();
 
