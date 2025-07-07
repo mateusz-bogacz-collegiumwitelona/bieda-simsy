@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,27 @@ namespace bieda_simsy.@abstract
                 return live - (random.Next(1, 10) * 2);
             }
             return live;
+        }
+
+        protected int OddMoney(int money)
+        {
+            return money - 10;
+        }
+
+        protected int Work(int money)
+        {
+            Random random = new Random();
+            return money + random.Next(1, 10);
+        }
+
+        protected int BuyFood(int hungry)
+        {
+            return hungry + 10;
+        }
+
+        protected int BuyHappiness(int happiness)
+        {
+            return happiness + 10;
         }
     }
 }

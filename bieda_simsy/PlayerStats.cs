@@ -50,11 +50,9 @@ namespace bieda_simsy
             Console.WriteLine($"Happiness: {_happiness}");
         }
 
-        protected void SetMinusStats()
+        protected void GetMoney()
         {
-            _live = OddLive(_live, _happiness, _hungry);
-            _hungry = OddHungry(_hungry);
-            _happiness = OddHappiness(_happiness);
+            Console.WriteLine($"Money: {_money}");
         }
 
         protected void PlayWith()
@@ -71,5 +69,33 @@ namespace bieda_simsy
         {
             _live = AddLive(_happiness, _hungry, _live);
         }
+
+        protected void YouMustWork()
+        {
+            int oddHappy = OddHappiness(_happiness);
+            int oddFood = OddHungry(_hungry);
+            int money = Work(_money);
+
+            Console.WriteLine($"You worked and earned some money. Current money: {money}");
+            Console.WriteLine($"But work is boring: You have {oddHappy} happiness and {oddFood} hunger.");
+            _happiness = oddHappy;
+            _hungry = oddFood;
+            _money += money;
+
+        }
+
+        protected void BuySomeFood()
+        {
+            _money = OddMoney(_money);
+            _hungry = BuyFood(_hungry);
+        }
+
+        protected void BuyAToy()
+        {
+            _money = OddMoney(_money);
+            _happiness = BuyHappiness(_happiness);
+        }
+
+
     }
 }

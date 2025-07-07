@@ -15,7 +15,7 @@ namespace bieda_simsy
             do
             {
                 ShowMainMenu();
-                choice =  Console.ReadLine();
+                choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -51,6 +51,10 @@ namespace bieda_simsy
 
         private void ShowPlayerOptionsMenu()
         {
+            Console.Clear();
+            GetInfo();
+            Console.WriteLine("");
+
             Console.WriteLine("1. Play with " + ShowName);
             Console.WriteLine("2. Feed " + ShowName);
             Console.WriteLine("3. Work " + ShowName);
@@ -63,13 +67,11 @@ namespace bieda_simsy
         {
             string choice;
 
-            do {
-                Console.Clear();
-
-                SetMinusStats();
-                GetInfo();
-                Console.WriteLine("");
+            do
+            {
                 ShowPlayerOptionsMenu();
+
+                Health();
 
                 choice = Console.ReadLine();
 
@@ -87,20 +89,16 @@ namespace bieda_simsy
                         Feed();
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
-                        Console.WriteLine("You fed your pet " + ShowName);
                         break;
                     case "3":
                         Console.Clear();
-                        Console.WriteLine("You chose to work for " + ShowName);
+                        YouMustWork();
                         Console.WriteLine("Press any key to continue...");
-
                         Console.ReadKey();
                         break;
                     case "4":
                         Console.Clear();
-                        Console.WriteLine("You chose to shop for " + ShowName);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
+                        BuyItems();
                         break;
                     case "0":
                         Console.Clear();
@@ -111,6 +109,68 @@ namespace bieda_simsy
                         break;
                 }
             } while (choice != "0");
+        }
+
+        private void ShopAssortment()
+        {
+            Console.Clear();
+            GetMoney();
+            Console.WriteLine("");
+            Console.WriteLine("Welcome to the shop!");
+            Console.WriteLine("1. Buy Food - 10 coins");
+            Console.WriteLine("2. Buy Toys - 10 coins");
+            Console.WriteLine("3. Info about items");
+            Console.WriteLine("0. Exit Shop");
+            Console.Write("What would you like to buy? ");
+        }
+
+
+        private void BuyItems()
+        {
+            Console.Clear();
+
+            string choice;
+
+            do
+            {
+                ShopAssortment();
+                choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        BuySomeFood();
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+                    case "2":
+                        Console.Clear();
+                        BuyAToy();
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+                    case "3":
+                        ShowInfoAboutProducts();
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+
+                }
+            } while (choice != "0");
+        }
+
+
+        public void ShowInfoAboutProducts()
+        {
+            Console.Clear();
+            Console.WriteLine("Product Information:");
+            Console.WriteLine("1. Food - Restores 10 pkt of hunger");
+            Console.WriteLine("2. Toys - Increases 10 pkt happiness");
+            Console.WriteLine("Press any key to return to the shop.");
+            Console.ReadKey();
         }
     }
 }
