@@ -21,10 +21,11 @@ namespace bieda_simsy
                 {
                     case "1":
                         SetName();
-                        ShowName();
+                        Console.Clear();
+                        ChoicePlayerOptions();
                         break;
                     case "2":
-                        Console.WriteLine("Loading game...");
+                        ChoicePlayerOptions();
                         break;
                     case "0":
                         Console.WriteLine("Exiting the game. Goodbye!");
@@ -38,7 +39,6 @@ namespace bieda_simsy
             } while (choice != "0");
         }
 
-
         private void ShowMainMenu()
         {
             Console.WriteLine("Welcome to Bieda Simsy!");
@@ -49,7 +49,47 @@ namespace bieda_simsy
             Console.Write("Enter your choice: ");
         }
 
+        private void ShowPlayerOptionsMenu()
+        {
+            Console.WriteLine("1. Play with " + ShowName);
+            Console.WriteLine("2. Feed " + ShowName);
+            Console.WriteLine("3. Work " + ShowName);
+            Console.WriteLine("4. Shop " + ShowName);
+            Console.WriteLine("5. Show " + ShowName + "Info");
+            Console.WriteLine("0. Exit to Main Menu");
+            Console.WriteLine("What is your choice?");
+        }
 
-        
+        private void ChoicePlayerOptions()
+        {
+            ShowPlayerOptionsMenu();
+
+            string choice = Console.ReadLine();
+
+            do
+            {
+                switch (choice)
+                {
+                    case "1":
+                        HighHappines();
+                        break;
+                    case "2":
+                        Console.WriteLine("You chose to feed" + ShowName);
+                        break;
+                    case "3":
+                        Console.WriteLine("You chose to work " + ShowName);
+                        break;
+                    case "4":
+                        Console.WriteLine("You chose to shop for " + ShowName);
+                        break;
+                    case "0":
+                        SetupGame();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            } while (choice != "0");
+        }
     }
 }

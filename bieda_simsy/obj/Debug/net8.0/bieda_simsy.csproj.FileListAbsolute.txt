@@ -12,3 +12,4 @@ C:\Users\mateu\Documents\projekty\simsy\bieda_simsy\bieda_simsy\obj\Debug\net8.0
 C:\Users\mateu\Documents\projekty\simsy\bieda_simsy\bieda_simsy\obj\Debug\net8.0\bieda_simsy.pdb
 C:\Users\mateu\Documents\projekty\simsy\bieda_simsy\bieda_simsy\obj\Debug\net8.0\bieda_simsy.genruntimeconfig.cache
 C:\Users\mateu\Documents\projekty\simsy\bieda_simsy\bieda_simsy\obj\Debug\net8.0\ref\bieda_simsy.dll
+C:\Users\mateu\Documents\projekty\simsy\bieda_simsy\bieda_simsy\obj\Debug\net8.0\bieda_simsy.sourcelink.json
