@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bieda_simsy
 {
-    internal class PlayerStats
+    internal class PlayerStats : StatsUp, StatsDown
     {
         private string _name;
         private int _live;
@@ -48,33 +48,16 @@ namespace bieda_simsy
             set { _name = value; }
         }
 
-
-        protected async Task LowHappines()
+        protected void LowStats(int live, int money, int hungary, int happiness)
         {
-            while (true)
-            {
-                await Task.Delay(TimeSpan.FromMinutes(1));
-                _happiness -= 1;
+            live = _live;
+            money = _money;
+            hungary = _hungry;
+            happiness = _happiness;
 
-                if (_happiness <= 0)
-                {
-                    await Task.Delay(TimeSpan.FromMinutes(1));
-                    _live -= 1;
-
-                    if (_live <= 0)
-                    {
-                        Console.WriteLine("You have died :(.");
-                        Environment.Exit(0);
-                    }
-                }
+            while (true) {
+                LowHappines(happiness);
             }
         }
-
-        protected void HighHappines()
-        {
-            Console.WriteLine("You played a game and your happiness increased by 1.");
-            _happiness += 1;
-        }
-
     }
 }

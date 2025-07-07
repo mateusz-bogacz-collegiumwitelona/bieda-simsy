@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|solutionrelative:bieda_simsy\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\playerstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|solutionrelative:bieda_simsy\\playerstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\statsup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|solutionrelative:bieda_simsy\\abstract\\statsup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\statsdown.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|solutionrelative:bieda_simsy\\abstract\\statsdown.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|solutionrelative:bieda_simsy\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3A2B38D1-20B5-43AE-89DC-6C9B4190ABB0}|bieda_simsy\\bieda_simsy.csproj|c:\\users\\mateu\\documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,37 +30,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StatsDown.cs",
+              "DocumentMoniker": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\StatsDown.cs",
+              "RelativeDocumentMoniker": "bieda_simsy\\abstract\\StatsDown.cs",
+              "ToolTip": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\StatsDown.cs",
+              "RelativeToolTip": "bieda_simsy\\abstract\\StatsDown.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAAAwAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T09:59:25.925Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "StatsUp.cs",
+              "DocumentMoniker": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\StatsUp.cs",
+              "RelativeDocumentMoniker": "bieda_simsy\\abstract\\StatsUp.cs",
+              "ToolTip": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\abstract\\StatsUp.cs",
+              "RelativeToolTip": "bieda_simsy\\abstract\\StatsUp.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T09:55:17.131Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "PlayerStats.cs",
               "DocumentMoniker": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\PlayerStats.cs",
               "RelativeDocumentMoniker": "bieda_simsy\\PlayerStats.cs",
-              "ToolTip": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\PlayerStats.cs",
-              "RelativeToolTip": "bieda_simsy\\PlayerStats.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwE8AAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\PlayerStats.cs*",
+              "RelativeToolTip": "bieda_simsy\\PlayerStats.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-07T08:42:13.296Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Game.cs",
               "DocumentMoniker": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\Game.cs",
               "RelativeDocumentMoniker": "bieda_simsy\\Game.cs",
               "ToolTip": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\Game.cs",
               "RelativeToolTip": "bieda_simsy\\Game.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAgwFYAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwFYAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-07T08:25:46.865Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\Program.cs",
               "RelativeDocumentMoniker": "bieda_simsy\\Program.cs",
