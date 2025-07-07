@@ -61,34 +61,49 @@ namespace bieda_simsy
 
         private void ChoicePlayerOptions()
         {
-            Console.Clear();
+            string choice;
 
-            SetMinusStats();
-            GetInfo();
-            Console.WriteLine("");
-            ShowPlayerOptionsMenu();
+            do {
+                Console.Clear();
 
-            string choice = Console.ReadLine();
+                SetMinusStats();
+                GetInfo();
+                Console.WriteLine("");
+                ShowPlayerOptionsMenu();
 
-            do { 
+                choice = Console.ReadLine();
+
                 switch (choice)
                 {
                     case "1":
                         Console.Clear();
                         PlayWith();
+                        Console.WriteLine("You played with yout pet " + ShowName);
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
                         break;
                     case "2":
                         Console.Clear();
                         Feed();
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        Console.WriteLine("You fed your pet " + ShowName);
                         break;
                     case "3":
                         Console.Clear();
                         Console.WriteLine("You chose to work for " + ShowName);
+                        Console.WriteLine("Press any key to continue...");
+
+                        Console.ReadKey();
                         break;
                     case "4":
+                        Console.Clear();
                         Console.WriteLine("You chose to shop for " + ShowName);
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
                         break;
                     case "0":
+                        Console.Clear();
                         SetupGame();
                         break;
                     default:
