@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
+using bieda_simsy.@abstract;
 
 namespace bieda_simsy
 {
-    internal class PlayerStats : StatsUp, StatsDown
+    internal class PlayerStats : StatMode
     {
         private string _name;
         private int _live;
@@ -33,6 +35,12 @@ namespace bieda_simsy
             return _name;
         }
 
+        protected string ShowName
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
         protected void GetInfo()
         {
             Console.WriteLine($"Name: {_name}");
@@ -42,22 +50,26 @@ namespace bieda_simsy
             Console.WriteLine($"Happiness: {_happiness}");
         }
 
-        protected string ShowName
+        protected void SetMinusStats()
         {
-            get { return _name;}
-            set { _name = value; }
+            _live = OddLive(_live, _happiness, _hungry);
+            _hungry = OddHungry(_hungry);
+            _happiness = OddHappiness(_happiness);
         }
 
-        protected void LowStats(int live, int money, int hungary, int happiness)
+        protected void PlayWith()
         {
-            live = _live;
-            money = _money;
-            hungary = _hungry;
-            happiness = _happiness;
+            _happiness = AddHappines(_happiness);
+        }
 
-            while (true) {
-                LowHappines(happiness);
-            }
+        protected void Feed()
+        {
+            _hungry = AddHungry(_hungry);
+        }
+
+        protected void Health()
+        {
+            _live = AddLive(_happiness, _hungry, _live);
         }
     }
 }

@@ -55,29 +55,35 @@ namespace bieda_simsy
             Console.WriteLine("2. Feed " + ShowName);
             Console.WriteLine("3. Work " + ShowName);
             Console.WriteLine("4. Shop " + ShowName);
-            Console.WriteLine("5. Show " + ShowName + "Info");
             Console.WriteLine("0. Exit to Main Menu");
             Console.WriteLine("What is your choice?");
         }
 
         private void ChoicePlayerOptions()
         {
+            Console.Clear();
+
+            SetMinusStats();
+            GetInfo();
+            Console.WriteLine("");
             ShowPlayerOptionsMenu();
 
             string choice = Console.ReadLine();
 
-            do
-            {
+            do { 
                 switch (choice)
                 {
                     case "1":
-                        HighHappines();
+                        Console.Clear();
+                        PlayWith();
                         break;
                     case "2":
-                        Console.WriteLine("You chose to feed" + ShowName);
+                        Console.Clear();
+                        Feed();
                         break;
                     case "3":
-                        Console.WriteLine("You chose to work " + ShowName);
+                        Console.Clear();
+                        Console.WriteLine("You chose to work for " + ShowName);
                         break;
                     case "4":
                         Console.WriteLine("You chose to shop for " + ShowName);
