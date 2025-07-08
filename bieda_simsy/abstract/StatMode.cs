@@ -10,62 +10,36 @@ namespace bieda_simsy.@abstract
     internal abstract class StatMode
     {
         protected readonly Random _random = new Random();
-        protected int AddHappines(int happines)
+        
+        protected int AddStats(int stats, int value)
         {
-            happines += _random.Next(1, 10);
-            return Math.Min(100, happines);
+            stats += value;
+            int add = Math.Min(100, stats);
+
+            stats =+ add;
+
+            if (stats > 100)
+            {
+                stats = 100;
+            }
+
+            return stats;
+
         }
 
-        protected int AddHungry(int hungry)
+        protected int OddStats(int stats, int value)
         {
-            hungry += _random.Next(1, 10);
-            return Math.Min(100, hungry);
+            stats += value;
+            return Math.Max(0, stats);
         }
 
-        protected int AddSleep(int sleep)
+        protected int NaturalOddStats(int stats, int value)
         {
-            sleep += _random.Next(1, 10);
-            return Math.Min(100, sleep);
+            stats -= _random.Next(1, value);
+            return Math.Max(0, stats);
         }
 
-        protected int OddHappiness(int happiness)
-        {
-            happiness -= _random.Next(1, 10);
-            return Math.Max(0, happiness);
-        }
-
-        protected int OddHungry(int hungry)
-        {
-            hungry -= _random.Next(1, 10);
-            return Math.Max(0, hungry);
-        }
-
-        protected int OddSleep(int sleep)
-        {
-            sleep -= _random.Next(1, 10);
-            return Math.Max(0, sleep);
-        }
-
-        protected int NaturalOddHappiness(int happiness)
-        {
-            happiness -= _random.Next(1, 4);
-            return Math.Max(0, happiness);
-        }
-
-        protected int NaturalOddHungry(int hungry)
-        {
-            hungry -= _random.Next(1, 4);
-            return Math.Max(0, hungry);
-        }
-
-        protected int NaturalOddSleep(int sleep)
-        {
-            sleep -= _random.Next(1, 4);
-            return Math.Max(0, sleep);
-        }
-
-
-        protected int MoneyFromWork()
+        protected int AddOddMoney()
         {
             return _random.Next(1, 10);
         }
@@ -93,7 +67,7 @@ namespace bieda_simsy.@abstract
 
                 return Math.Max(0, currentLive - lifeLoss);
             }
-            else if (happiness >= 100 && hungry >= 100 && sleep >= 100)
+            else if (happiness == 100 && hungry == 100 && sleep == 100)
             {
                 int lifeGain = _random.Next(1, 5);
                 return Math.Min(100, currentLive + lifeGain);
@@ -102,7 +76,7 @@ namespace bieda_simsy.@abstract
             return currentLive;
         }
 
-        protected int ProcessPurchase(int money, int cost)
+        protected int PayForSomething(int money, int cost)
         {
             return money - cost;
         }
@@ -112,30 +86,9 @@ namespace bieda_simsy.@abstract
             return money >= cost;
         }
 
-        protected bool IsHappinessCritical(int happiness)
-        {
-            return happiness < 30;
-        }
-
-        protected bool IsHungtyCritical(int hungry)
-        {
-            return hungry < 30;
-        }
-
-        protected bool IsSleepCritical(int sleep)
-        {
-            return sleep < 30;
-        }
-
-        protected bool IsLifeCritical(int life)
-        {
-            return life < 30;
-        }
-
         protected bool IsDead(int life)
         {
             return life <= 0;
         }
-
     }
 }

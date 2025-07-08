@@ -54,6 +54,11 @@ namespace bieda_simsy
         private void ShowPlayerOptionsMenu()
         {
             Console.Clear();
+
+            MustPayTax();
+            
+            Console.WriteLine("");
+            
             Console.WriteLine($"Name: {GetName()}");
             Console.WriteLine($"Live: {GetLive()}");
             Console.WriteLine($"Money: {GetMoney()}");
@@ -92,13 +97,13 @@ namespace bieda_simsy
                 switch (choice)
                 {
                     case "1":
-                        PlayWith();
+                        PlayWith(10);
                         break;
                     case "2":
-                        Feed();
+                        Feed(10);
                         break;
                     case "3":
-                        YouMustWork();
+                        YouMustWork(10);
                         break;
                     case "4":
                         break;
@@ -150,21 +155,16 @@ namespace bieda_simsy
                 switch (choice)
                 {
                     case "1":
-                        Console.Clear();
-                        BuySomeFood();
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
+                        BuySomething("Food", 1, 10, 5);
                         break;
                     case "2":
-                        Console.Clear();
-                        BuyAToy();
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
+                        BuySomething("Toys", 2, 10, 5);
                         break;
                     case "3":
+                        BuySomething("Coffe", 3, 10, 5);
+                        break;
+                    case "4":
                         ShowInfoAboutProducts();
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
