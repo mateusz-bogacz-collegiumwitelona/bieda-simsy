@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\bieda_simsy.csproj": {}
+    "C:\\Users\\mateusz\\Documents\\projects\\bieda-simsy\\bieda_simsy\\bieda_simsy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\bieda_simsy.csproj": {
+    "C:\\Users\\mateusz\\Documents\\projects\\bieda-simsy\\bieda_simsy\\bieda_simsy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\bieda_simsy.csproj",
+        "projectUniqueName": "C:\\Users\\mateusz\\Documents\\projects\\bieda-simsy\\bieda_simsy\\bieda_simsy.csproj",
         "projectName": "bieda_simsy",
-        "projectPath": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\bieda_simsy.csproj",
-        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mateu\\Documents\\projekty\\simsy\\bieda_simsy\\bieda_simsy\\obj\\",
+        "projectPath": "C:\\Users\\mateusz\\Documents\\projects\\bieda-simsy\\bieda_simsy\\bieda_simsy.csproj",
+        "packagesPath": "C:\\Users\\mateusz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateusz\\Documents\\projects\\bieda-simsy\\bieda_simsy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

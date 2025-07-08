@@ -29,6 +29,7 @@ namespace bieda_simsy
                         break;
                     case "0":
                         Console.WriteLine("Exiting the game. Goodbye!");
+                        Dispose();
                         break;
                     default:
                         Console.WriteLine("Are you a idiot? Please enter a valid option (0-2).");
@@ -55,10 +56,11 @@ namespace bieda_simsy
             GetInfo();
             Console.WriteLine("");
 
-            Console.WriteLine("1. Play with " + ShowName);
-            Console.WriteLine("2. Feed " + ShowName);
-            Console.WriteLine("3. Work " + ShowName);
-            Console.WriteLine("4. Shop " + ShowName);
+            Console.WriteLine($"1. Play with {ShowName}");
+            Console.WriteLine($"2. Feed {ShowName}");
+            Console.WriteLine($"3. Work {ShowName}");
+            Console.WriteLine($"4. Sleep {ShowName}");
+            Console.WriteLine($"5. Shop {ShowName}");
             Console.WriteLine("0. Exit to Main Menu");
             Console.WriteLine("What is your choice?");
         }
@@ -68,45 +70,31 @@ namespace bieda_simsy
             string choice;
 
             do
-
             {
-                ShowPlayerOptionsMenu();
-
-                Health();
-
-                if ( Dead() == true)
+                if(!IsAlive)
                 {
-                    Console.WriteLine("Your pupil is dead");
-                    break;
-
+                    Console.WriteLine("You are dead. Game over.");
+                    return;
                 }
 
+                ShowPlayerOptionsMenu();
 
                 choice = Console.ReadLine();
 
                 switch (choice)
                 {
                     case "1":
-                        Console.Clear();
                         PlayWith();
-                        Console.WriteLine("You played with yout pet " + ShowName);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
                         break;
                     case "2":
-                        Console.Clear();
                         Feed();
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
                         break;
                     case "3":
-                        Console.Clear();
                         YouMustWork();
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
                         break;
                     case "4":
-                        Console.Clear();
+                        break;
+                    case "5":
                         BuyItems();
                         break;
                     case "0":
@@ -142,8 +130,16 @@ namespace bieda_simsy
 
             do
             {
+                if (!IsAlive)
+                {
+                    Console.WriteLine("You are dead. Game over.");
+                    return;
+                }
+
                 ShopAssortment();
+                
                 choice = Console.ReadLine();
+                
                 switch (choice)
                 {
                     case "1":
