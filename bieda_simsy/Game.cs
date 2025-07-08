@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace bieda_simsy
 {
@@ -53,14 +54,21 @@ namespace bieda_simsy
         private void ShowPlayerOptionsMenu()
         {
             Console.Clear();
-            GetInfo();
+            Console.WriteLine($"Name: {GetName()}");
+            Console.WriteLine($"Live: {GetLive()}");
+            Console.WriteLine($"Money: {GetMoney()}");
+            Console.WriteLine($"Hungry: {GetHungry()}");
+            Console.WriteLine($"Happiness: {GetHappiness()}");
+            Console.WriteLine($"Sleep: {GetSleep()}");
+
+
             Console.WriteLine("");
 
-            Console.WriteLine($"1. Play with {ShowName}");
-            Console.WriteLine($"2. Feed {ShowName}");
-            Console.WriteLine($"3. Work {ShowName}");
-            Console.WriteLine($"4. Sleep {ShowName}");
-            Console.WriteLine($"5. Shop {ShowName}");
+            Console.WriteLine($"1. Play with {GetName()}");
+            Console.WriteLine($"2. Feed {GetName()}");
+            Console.WriteLine($"3. Work {GetName()}");
+            Console.WriteLine($"4. Sleep {GetName()}");
+            Console.WriteLine($"5. Shop {GetName()}");
             Console.WriteLine("0. Exit to Main Menu");
             Console.WriteLine("What is your choice?");
         }
@@ -71,7 +79,7 @@ namespace bieda_simsy
 
             do
             {
-                if(!IsAlive)
+                if (!IsAlive)
                 {
                     Console.WriteLine("You are dead. Game over.");
                     return;
@@ -121,7 +129,6 @@ namespace bieda_simsy
             Console.Write("What would you like to buy? ");
         }
 
-
         private void BuyItems()
         {
             Console.Clear();
@@ -137,9 +144,9 @@ namespace bieda_simsy
                 }
 
                 ShopAssortment();
-                
+
                 choice = Console.ReadLine();
-                
+
                 switch (choice)
                 {
                     case "1":

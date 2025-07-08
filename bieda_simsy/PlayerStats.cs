@@ -16,10 +16,12 @@ namespace bieda_simsy
         private int _money;
         private int _happiness;
         private int _hungry;
+        private int _sleep;
         private bool _isAlive;
         private Timer _startTimer;
         private readonly object _lock = new object();
-        private int _sleep;
+
+        public bool IsAlive => _isAlive;
 
         public PlayerStats()
         {
@@ -36,7 +38,7 @@ namespace bieda_simsy
 
         private void StartStatsDecay()
         {
-            _startTimer = new Timer(DecayStats, null, 15000, 15000);
+            _startTimer = new Timer(DecayStats, null, 5000, 15000);
         }
 
         private void DecayStats(object state)
@@ -44,50 +46,25 @@ namespace bieda_simsy
             lock (_lock)
             {
                 if (!_isAlive) return;
+                
+                _happiness = NaturalOddHappiness(_happiness);
+                _hungry = NaturalOddHungry(_hungry);
+                _sleep = NaturalOddSleep(_sleep);
 
-                Random random = new Random();
+                _live = LiveChanged(_happiness, _hungry, _sleep, _live);
 
-                _happiness = Math.Max(0, _happiness - random.Next(1,4));
-                _hungry = Math.Max(0, _hungry - random.Next(1, 4));
-                _sleep = Math.Max(0, _sleep - random.Next(1, 4));
-
-                UpdateLifeBasedOnStats();
-
-
-            }
-        }
-
-        private void UpdateLifeBasedOnStats()
-        {
-            Random random = new Random();
-
-            if (_happiness <= 0 || _hungry <= 0 || _sleep <= 0 )
-            { 
-                int lifeLoss = random.Next(1, 5);
-
-                if (_happiness <=0 && _hungry <= 0)
+                if (IsDead(_live))
                 {
-                    lifeLoss *= 2;
+                    _isAlive = false;
+                    CheckIfAlive();
                 }
-
-                if (_happiness <= 0 && _hungry <= 0 && _sleep <= 0)
-                {
-                    lifeLoss *= 3;
-                }
-
-                _live = Math.Max(0, _live - lifeLoss);
-            }
-            else if (_happiness >= 100 && _hungry >= 100 && _sleep >= 100)
-            {
-                _live = Math.Min(100, _live + random.Next(1, 5));
             }
         }
 
         private void CheckIfAlive()
         {
-            if (_live <= 0)
+            if(_isAlive)
             {
-                _isAlive = false;
                 _startTimer?.Dispose();
                 Console.WriteLine($"\n{_name} has died. Game over.");
                 Console.WriteLine("Press any key to exit...");
@@ -95,22 +72,12 @@ namespace bieda_simsy
             }
         }
 
-        public bool IsAlive => _isAlive;
-
         protected string SetName()
         {
             Console.Write("Enter your name: ");
             string Name = Console.ReadLine();
-
             _name = Name;
-
             return _name;
-        }
-
-        protected string ShowName
-        {
-            get { return _name; }
-            set { _name = value; }
         }
 
         protected void GetInfo()
@@ -122,34 +89,63 @@ namespace bieda_simsy
             Console.WriteLine($"Happiness: {_happiness}");
             Console.WriteLine($"Sleep: {_sleep}");
 
-            if (_happiness < 30) Console.WriteLine("Very unhappy!");
-            if (_hungry < 30) Console.WriteLine("Very hungry!");
-            if (_live < 30) Console.WriteLine("Critical health!");
-            if (_sleep < 30) Console.WriteLine("Critical sleep!");
         }
 
-        protected void GetMoney()
+        protected string GetName()
         {
-            Console.WriteLine($"Money: {_money}");
+            return _name;
+        }
+
+        protected int GetLive()
+        {
+            return _live;
+        }
+
+        protected int GetMoney()
+        {
+            return _money;
+        }
+
+        protected int GetHungry()
+        {
+            return _hungry;
+        }
+
+        protected int GetSleep()
+        {
+            return _sleep;
+        }
+
+
+        protected int GetHappiness()
+        {
+            return _happiness;
         }
 
         protected void PlayWith()
         {
             Console.Clear();
-            int happy = AddHappines(_happiness);
-            Console.WriteLine($"You played with {_name}. Hapinest decreased by {happy}");
-            lock (_lock) _happiness = happy;
+            lock (_lock)
+            {
+                int oldHappiness = _happiness;
+                _happiness = AddHappines(_happiness);
+                int happinessGained = _happiness - oldHappiness;
+                Console.WriteLine($"You played with {_name}. Happiness increased by {happinessGained}");
+            }
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-
         }
 
         protected void Feed()
         {
             Console.Clear();
-            int hungry = AddHungry(_hungry);
-            Console.WriteLine($"You fed {_name}. Hunger decreased by {hungry}");
-            lock (_lock) _hungry = hungry;
+            lock (_lock)
+            {
+                int oldHungry = _hungry;
+                _hungry = AddHungry(_hungry);
+                int hungryGained = _hungry - oldHungry;
+                Console.WriteLine($"You fed {_name}. Hunger increased by {hungryGained}");
+            }
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
@@ -158,58 +154,97 @@ namespace bieda_simsy
         {
             Console.Clear();
 
-            _happiness = OddHappiness(_happiness);
-            _hungry = OddHungry(_hungry);
-            _money = Work(_money);
-            _sleep = OddSleep(_sleep);
+            lock (_lock)
+            {
+                int moneyFromWork = MoneyFromWork();
+                _money += moneyFromWork;
 
-            Console.WriteLine($"You worked and earned some money. Current money: {_money}");
-            Console.WriteLine($"But work is boring: You have {_happiness} happiness, {_hungry} hunger and {_sleep} sleep.");;
+                _happiness = OddHappiness(_happiness);
+                _hungry = OddHungry(_hungry);
+                _sleep = OddSleep(_sleep);
 
+                Console.WriteLine($"You worked and earned {moneyFromWork} money. Current money: {_money}");
+                Console.WriteLine($"But work is boring: You have {_happiness} happiness, {_hungry} hunger and {_sleep} sleep.");
+            }
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
 
         protected void BuySomeFood()
         {
+            Console.Clear();
+            
             lock (_lock)
             {
-                if (_money >= 10)
+                if(CanAfford(_money, 10))
                 {
-                    _money = OddMoney(_money);
+                    _money = ProcessPurchase(_money, 10);
                     _hungry = AddHungry(_hungry);
-                    Console.WriteLine("You bought some food.");
+                    Console.WriteLine($"You bought some food.  {_name} current have {_hungry} pkt of hungry");
                 }
                 else
                 {
                     Console.WriteLine("Not enough money to buy food.");
                 }
             }
+            
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
         protected void BuyAToy()
         {
+            Console.Clear();
+
             lock (_lock)
             {
-                if (_money >= 10)
+                if(CanAfford(_money, 10))
                 {
-                    _money = OddMoney(_money);
+                    _money = ProcessPurchase(_money, 10);
                     _happiness = AddHappines(_happiness);
-                    Console.WriteLine("You bought a toy.");
+                    Console.WriteLine($"You bought a toy. {_name} current have {_happiness} pkt of happiness");
                 }
                 else
                 {
                     Console.WriteLine("Not enough money to buy a toy.");
                 }
             }
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        protected void BuyCoffe()
+        {
+            Console.Clear();
+            lock (_lock)
+            {
+                if(CanAfford(_money, 5))
+                {
+                    _money = ProcessPurchase(_money, 5);
+                    _sleep = AddSleep(_sleep);
+                    Console.WriteLine($"You bought a coffee. {_name} current have {_sleep} pkt of sleepness");
+                }
+                else
+                {
+                    Console.WriteLine("Not enough money to buy coffee.");
+                }
+            }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
         protected void Sleep()
         {
             Console.Clear();
-            int sleep = AddSleep(_sleep);
-            Console.WriteLine($"You slept well. Sleep increased by {sleep}");
-            lock (_lock) _sleep = sleep;
+            lock (_lock)
+            {
+                int oldSleep = _sleep;
+                _sleep = AddSleep(_sleep);
+                int sleepGained = _sleep - oldSleep;
+                Console.WriteLine($"You slept. Sleep increased by {sleepGained}");
+            }
+
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
