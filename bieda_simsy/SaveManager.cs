@@ -37,7 +37,7 @@ namespace bieda_simsy
             File.WriteAllText(FileName, json);
         }
 
-        public void Load()
+        public void LoadData()
         {
             //
         }

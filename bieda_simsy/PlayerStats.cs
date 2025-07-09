@@ -10,7 +10,7 @@ using bieda_simsy.Interfaces;
 
 namespace bieda_simsy
 {
-    internal class PlayerStats : StatMode, SavedInterface
+    internal class PlayerStats : StatMode, ISaved
     {
         private string _name;
         private int _live;

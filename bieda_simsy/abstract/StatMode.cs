@@ -24,7 +24,6 @@ namespace bieda_simsy.@abstract
             }
 
             return stats;
-
         }
 
         protected int OddStats(int stats, int value)

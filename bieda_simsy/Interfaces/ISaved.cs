@@ -11,6 +11,6 @@ namespace bieda_simsy.Interfaces
     {
         string FileName { get; }
         Dictionary<string, object> GetData();
-               
+        void LoadData();
     }
 }
