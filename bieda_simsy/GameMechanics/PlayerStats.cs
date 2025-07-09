@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
-using bieda_simsy.@abstract;
-using bieda_simsy.Interfaces;
+using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.Saved.Interfaces;
 
-namespace bieda_simsy
+namespace bieda_simsy.GameMechanics
 {
     internal class PlayerStats : StatMode, ISaved
     {
@@ -24,8 +24,8 @@ namespace bieda_simsy
         private readonly object _lock = new object();
 
         public bool IsAlive => _isAlive;
-        public string FileName => 
-            string.IsNullOrEmpty(_name) 
+        public string FileName =>
+            string.IsNullOrEmpty(_name)
             ? "default_save" : _name.ToLower().Replace(" ", "_");
 
         public PlayerStats()
@@ -48,7 +48,7 @@ namespace bieda_simsy
         }
 
         private void DecayStats(object state)
-        { 
+        {
             lock (_lock)
             {
                 if (!_isAlive) return;
@@ -71,7 +71,7 @@ namespace bieda_simsy
                 }
             }
         }
-        
+
         protected string GetName()
         {
             return _name;
@@ -105,14 +105,26 @@ namespace bieda_simsy
         protected string SetName()
         {
             Console.Write("Enter your name: ");
-            string Name = Console.ReadLine();
-            _name = Name;
+            string name = Console.ReadLine();
+            _name = name;
             return _name;
+        }
+
+        protected void SetName(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                _name = name;
+            }
+            else
+            {
+                _name = "Unnamed";
+            }
         }
 
         private void CheckIfAlive()
         {
-            if(_isAlive)
+            if (_isAlive)
             {
                 _startTimer?.Dispose();
                 Console.WriteLine($"\n{_name} has died. Game over.");
@@ -208,7 +220,7 @@ namespace bieda_simsy
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
-       
+
         protected void Sleep()
         {
             Console.Clear();
@@ -240,18 +252,36 @@ namespace bieda_simsy
             }
         }
 
+        public void LoadData(Dictionary<string, object> data)
+        {
+            lock (_lock)
+            {
+                _name = data["name"]?.ToString() ?? "Unnamed";
+                _live = Convert.ToInt32(data["live"]);
+                _money = Convert.ToInt32(data["money"]);
+                _happiness = Convert.ToInt32(data["happiness"]);
+                _hungry = Convert.ToInt32(data["hungry"]);
+                _sleep = Convert.ToInt32(data["sleep"]);
+                _isAlive = Convert.ToBoolean(data["isAlive"]);
+            }
+        }
+
         public Dictionary<string, object> GetData()
         {
-            return new Dictionary<string, object>
+            lock (_lock)
             {
-                { "name", _name },
-                { "live", _live },
-                { "money", _money },
-                { "happiness", _happiness },
-                { "hungry", _hungry },
-                { "sleep", _sleep },
-                { "isAlive", _isAlive }
-            };
+                return new Dictionary<string, object>
+                {
+                    { "name", _name },
+                    { "live", _live },
+                    { "money", _money },
+                    { "happiness", _happiness },
+                    { "hungry", _hungry },
+                    { "sleep", _sleep },
+                    { "isAlive", _isAlive }
+                };
+            }
         }
+
     }
 }

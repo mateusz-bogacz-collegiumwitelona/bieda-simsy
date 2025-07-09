@@ -1,4 +1,4 @@
-﻿using bieda_simsy;
+﻿using bieda_simsy.GameMechanics;
 
 Game game = new Game();
 

@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bieda_simsy.Interfaces
+namespace bieda_simsy.Saved.Interfaces
 {
-    internal interface SavedInterface
+    internal interface ISaved
     {
         string FileName { get; }
         Dictionary<string, object> GetData();
-        void LoadData();
+        void LoadData(Dictionary<string, object> data);
     }
 }

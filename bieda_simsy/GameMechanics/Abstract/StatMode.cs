@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bieda_simsy.@abstract
+namespace bieda_simsy.GameMechanics.Abstract
 {
     internal abstract class StatMode
     {

@@ -1,14 +1,22 @@
-﻿using System;
+﻿using bieda_simsy.Saved;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace bieda_simsy
+namespace bieda_simsy.GameMechanics
 {
     internal class Game : PlayerStats
     {
+        private SaveManager _saveManager;
+        
+        public Game()
+        {
+            _saveManager = new SaveManager();
+        }
+
         public void SetupGame()
         {
             string choice;
@@ -26,7 +34,7 @@ namespace bieda_simsy
                         ChoicePlayerOptions();
                         break;
                     case "2":
-                        ChoicePlayerOptions();
+                        LoadGameMenu();
                         break;
                     case "0":
                         Console.WriteLine("Exiting the game. Goodbye!");
@@ -47,9 +55,53 @@ namespace bieda_simsy
             Console.WriteLine("Main Menu:");
             Console.WriteLine("1. Start New Game");
             Console.WriteLine("2. Load Game");
+            Console.WriteLine("3. Show Saves List");
             Console.WriteLine("0. Exit");
             Console.Write("Enter your choice: ");
         }
+
+        private void LoadGameMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Load Game:\n");
+
+            var saves = _saveManager.GetAllSaves();
+
+            if (saves.Count() == 0)
+            {
+                Console.WriteLine("No saves found");
+                Console.WriteLine("Press any key to return to the main menu.");
+                Console.ReadKey();
+                return;
+            }
+
+            for (int i = 0; i < saves.Count(); i++)
+            {
+                string status = saves[i].IsAlive ? "Alive" : "Dead";
+                Console.WriteLine($"{i + 1}. {saves[i].PlayerName} ({status}) - {saves[i].SaveDate:yyyy-MM-dd HM:mm}");
+            }
+
+            Console.WriteLine("Select a save to load (or press 0 to return): ");
+
+            string choice = Console.ReadLine();
+
+            if (int.TryParse(choice, out int index) && index > 0 && index <= saves.Count)
+            {
+                var selectedSave = saves[index - 1];
+                SetName(selectedSave.PlayerName);
+                _saveManager.LoadGame(this);
+                Console.Clear();
+                ChoicePlayerOptions();
+            }
+            else if (choice != "0")
+            {
+                Console.WriteLine("Invalid choice. Please try again.");
+                Console.WriteLine("Press any key to return to the main menu.");
+                Console.ReadKey();
+            }
+        }
+
+
 
         private void ShowPlayerOptionsMenu()
         {
@@ -74,6 +126,7 @@ namespace bieda_simsy
             Console.WriteLine($"3. Work {GetName()}");
             Console.WriteLine($"4. Sleep {GetName()}");
             Console.WriteLine($"5. Shop {GetName()}");
+            Console.WriteLine("6. Save Game");
             Console.WriteLine("0. Exit to Main Menu");
             Console.WriteLine("What is your choice?");
         }
@@ -110,6 +163,9 @@ namespace bieda_simsy
                     case "5":
                         BuyItems();
                         break;
+                    case "6":
+                        SaveGame();
+                        break;
                     case "0":
                         Console.Clear();
                         SetupGame();
@@ -119,6 +175,14 @@ namespace bieda_simsy
                         break;
                 }
             } while (choice != "0");
+        }
+
+        private void SaveGame()
+        {
+            _saveManager.SaveGame(this);
+            Console.WriteLine("Game saved successfully!");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
 
         private void ShopAssortment()
