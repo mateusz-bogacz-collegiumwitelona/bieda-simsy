@@ -8,11 +8,11 @@ using System.Xml.Linq;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class Game : PlayerStats
+    internal class GameManager : PlayerManager
     {
         private SaveManager _saveManager;
         
-        public Game()
+        public GameManager()
         {
             _saveManager = new SaveManager();
         }
@@ -51,11 +51,11 @@ namespace bieda_simsy.GameMechanics
 
         private void ShowMainMenu()
         {
-            Console.WriteLine("Welcome to Bieda Simsy!");
+            Console.Clear();
+            Console.WriteLine("Welcome to Bieda Simsy (Tamagotchi)!");
             Console.WriteLine("Main Menu:");
             Console.WriteLine("1. Start New Game");
             Console.WriteLine("2. Load Game");
-            Console.WriteLine("3. Show Saves List");
             Console.WriteLine("0. Exit");
             Console.Write("Enter your choice: ");
         }
@@ -116,17 +116,16 @@ namespace bieda_simsy.GameMechanics
             Console.WriteLine($"Money: {GetMoney()}");
             Console.WriteLine($"Hungry: {GetHungry()}");
             Console.WriteLine($"Happiness: {GetHappiness()}");
-            Console.WriteLine($"Sleep: {GetSleep()}");
-
-
-            Console.WriteLine("");
+            Console.WriteLine($"Purity: {GetPurity()}");
+            Console.WriteLine($"Sleep: {GetSleep()} \n");
 
             Console.WriteLine($"1. Play with {GetName()}");
             Console.WriteLine($"2. Feed {GetName()}");
             Console.WriteLine($"3. Work {GetName()}");
             Console.WriteLine($"4. Sleep {GetName()}");
-            Console.WriteLine($"5. Shop {GetName()}");
-            Console.WriteLine("6. Save Game");
+            Console.WriteLine($"5. Wash {GetName()}");
+            Console.WriteLine("6. Go to shop");
+            Console.WriteLine("7. Save Game");
             Console.WriteLine("0. Exit to Main Menu");
             Console.WriteLine("What is your choice?");
         }
@@ -143,27 +142,35 @@ namespace bieda_simsy.GameMechanics
                     return;
                 }
 
+                Random random = new Random();
+                int rand = random.Next(1, 5);
+
                 ShowPlayerOptionsMenu();
 
                 choice = Console.ReadLine();
 
+
                 switch (choice)
                 {
                     case "1":
-                        PlayWith(10);
+                        PlayWith(10, rand);
                         break;
                     case "2":
-                        Feed(10);
+                        Feed(10, rand);
                         break;
                     case "3":
-                        YouMustWork(10);
+                        YouMustWork(10, rand);
                         break;
                     case "4":
+                        Sleep(10, rand);
                         break;
                     case "5":
-                        BuyItems();
+                        WashYourself(10, rand);
                         break;
                     case "6":
+                        BuyItems();
+                        break;
+                    case "7":
                         SaveGame();
                         break;
                     case "0":
@@ -213,21 +220,23 @@ namespace bieda_simsy.GameMechanics
                 }
 
                 ShopAssortment();
-
+                Random random = new Random();
+                int rand = random.Next(1, 5);
                 choice = Console.ReadLine();
 
                 switch (choice)
                 {
                     case "1":
-                        BuySomething("Food", 1, 10, 5);
+                        BuySomething("Food", 1, 10, 5, rand);
                         break;
                     case "2":
-                        BuySomething("Toys", 2, 10, 5);
+                        BuySomething("Toys", 2, 10, 5, rand);
                         break;
                     case "3":
-                        BuySomething("Coffe", 3, 10, 5);
+                        BuySomething("Coffe", 3, 10, 5, rand);
                         break;
                     case "4":
+                        BuySomething("Soup", 4, 10, 5, rand);
                         ShowInfoAboutProducts();
                         break;
                     default:
@@ -243,8 +252,10 @@ namespace bieda_simsy.GameMechanics
         {
             Console.Clear();
             Console.WriteLine("Product Information:");
-            Console.WriteLine("1. Food - Restores 10 pkt of hunger");
-            Console.WriteLine("2. Toys - Increases 10 pkt happiness");
+            Console.WriteLine("1. Food - Restores 10 of hunger");
+            Console.WriteLine("2. Toys - Restores 10 happiness");
+            Console.WriteLine("3. Coffe - Restores 10 of sleep");
+            Console.WriteLine("4. Soup - Restores 10 of purity\n");
             Console.WriteLine("Press any key to return to the shop.");
             Console.ReadKey();
         }

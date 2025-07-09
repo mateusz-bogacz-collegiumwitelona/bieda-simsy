@@ -14,6 +14,7 @@ namespace bieda_simsy.Saved.Models
         public int Happiness { get; set; }
         public int Hungry { get; set; }
         public int Sleep { get; set; }
+        public int Purity { get; set; }
         public bool IsAlive { get; set; }
         public DateTime SaveDate { get; set; }
 

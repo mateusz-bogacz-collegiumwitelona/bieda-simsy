@@ -28,12 +28,6 @@ namespace bieda_simsy.GameMechanics.Abstract
 
         protected int OddStats(int stats, int value)
         {
-            stats += value;
-            return Math.Max(0, stats);
-        }
-
-        protected int NaturalOddStats(int stats, int value)
-        {
             stats -= _random.Next(1, value);
             return Math.Max(0, stats);
         }

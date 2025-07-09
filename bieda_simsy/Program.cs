@@ -1,5 +1,5 @@
 ﻿using bieda_simsy.GameMechanics;
 
-Game game = new Game();
+GameManager game = new GameManager();
 
 game.SetupGame();

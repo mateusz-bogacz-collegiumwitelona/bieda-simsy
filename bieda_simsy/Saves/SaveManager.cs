@@ -35,6 +35,7 @@ namespace bieda_simsy
                     Happiness = Convert.ToInt32(data["happiness"]),
                     Hungry = Convert.ToInt32(data["hungry"]),
                     Sleep = Convert.ToInt32(data["sleep"]),
+                    Purity = Convert.ToInt32(data["purity"]),
                     IsAlive = Convert.ToBoolean(data["isAlive"])
                 };
 
@@ -79,6 +80,7 @@ namespace bieda_simsy
                     ["happiness"] = saveModel.Happiness,
                     ["hungry"] = saveModel.Hungry,
                     ["sleep"] = saveModel.Sleep,
+                    ["purity"] = saveModel.Purity,
                     ["isAlive"] = saveModel.IsAlive
                 };
 
