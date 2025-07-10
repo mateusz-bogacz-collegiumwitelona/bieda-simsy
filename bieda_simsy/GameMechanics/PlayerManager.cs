@@ -5,7 +5,7 @@ using bieda_simsy.Saved.Interfaces;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class PlayerManager : StatModifier, ISaved, IStats, IStatsModifier
+    internal class PlayerManager : StatModifier, ISaved, IStats, IStatsModifier, IEvents
     {
         private string _name;
         private int _live;
@@ -313,11 +313,11 @@ namespace bieda_simsy.GameMechanics
             switch (choice)
             {
                 case 1:
-                    eventResults = positiveEvents.GeneratePositiveEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                    eventResults = positiveEvents.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     ApplyEventsResoult(eventResults);
                     break;
                 case 2:
-                    eventResults = negativeEvents.GenerateNegativeEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                    eventResults = negativeEvents.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     ApplyEventsResoult(eventResults);
                     break;
                 default:

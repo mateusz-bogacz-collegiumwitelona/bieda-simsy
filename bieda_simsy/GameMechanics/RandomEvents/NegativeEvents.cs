@@ -1,14 +1,15 @@
 ﻿using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.GameMechanics.Interfaces;
 
 namespace bieda_simsy.GameMechanics.RandomEvents
 {
-    internal class NegativeEvents : StatModifier
+    internal class NegativeEvents : StatModifier, IEvents
     {
         private static Random _random = new Random();
         private int change = 0;
         private int oldStat = 0;
 
-        public Dictionary<string, int> GenerateNegativeEvent(
+        public Dictionary<string, int> GenerateEvent(
             int live,
             int money,
             int happiness,
