@@ -1,15 +1,8 @@
 ﻿using bieda_simsy.GameMechanics.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace bieda_simsy.GameMechanics.RandomEvents
 {
-    internal class PositiveEvents : StatMode
+    internal class PositiveEvents : StatModifier
     {
         private static Random _random = new Random();
         private int change = 0;

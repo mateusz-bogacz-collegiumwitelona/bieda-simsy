@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bieda_simsy.Saved.Models
+﻿namespace bieda_simsy.Saved.Models
 {
     public class SaveModel
     {

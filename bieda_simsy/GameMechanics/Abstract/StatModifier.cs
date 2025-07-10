@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using bieda_simsy.GameMechanics.Interfaces;
 
 namespace bieda_simsy.GameMechanics.Abstract
 {
-    internal abstract class StatMode
+    internal abstract class StatModifier : IStatsModifier
     {
-        protected readonly Random _random = new Random();
+        private readonly Random _random = new Random();
         
-        protected int AddStats(int stats, int value)
+        public int AddStats(int stats, int value)
         {
             stats += value;
 
@@ -23,18 +18,18 @@ namespace bieda_simsy.GameMechanics.Abstract
             return stats;
         }
 
-        protected int OddStats(int stats, int value)
+        public int OddStats(int stats, int value)
         {
             stats -= _random.Next(1, value + 1);
             return Math.Max(0, stats);
         }
 
-        protected int AddOddMoney()
+        public int AddOddMoney()
         {
             return _random.Next(1, 11);
         }
         
-        protected int LiveChanged(
+        public int LiveChanged(
             int happiness, 
             int hungry, 
             int sleep,
@@ -66,17 +61,17 @@ namespace bieda_simsy.GameMechanics.Abstract
             return currentLive;
         }
 
-        protected int PayForSomething(int money, int cost)
+        public int PayForSomething(int money, int cost)
         {
             return Math.Max(0, money - cost);
         }
 
-        protected bool CanAfford(int money, int cost)
+        public bool CanAfford(int money, int cost)
         {
             return money >= cost;
         }
 
-        protected bool IsDead(int life)
+        public bool IsDead(int life)
         {
             return life <= 0;
         }

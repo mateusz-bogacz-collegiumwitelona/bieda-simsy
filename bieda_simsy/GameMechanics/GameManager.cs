@@ -1,14 +1,8 @@
-﻿using bieda_simsy.Saved;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using bieda_simsy.GameMechanics.Interfaces;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class GameManager : PlayerManager
+    internal class GameManager : PlayerManager, IStats
     {
         private SaveManager _saveManager;
         
@@ -111,19 +105,19 @@ namespace bieda_simsy.GameMechanics
             
             Console.WriteLine("");
             
-            Console.WriteLine($"Name: {GetName()}");
-            Console.WriteLine($"Live: {GetLive()}");
-            Console.WriteLine($"Money: {GetMoney()}");
-            Console.WriteLine($"Hungry: {GetHungry()}");
-            Console.WriteLine($"Happiness: {GetHappiness()}");
-            Console.WriteLine($"Purity: {GetPurity()}");
-            Console.WriteLine($"Sleep: {GetSleep()} \n");
+            Console.WriteLine($"Name: {Name}");
+            Console.WriteLine($"Live: {Live}");
+            Console.WriteLine($"Money: {Money}");
+            Console.WriteLine($"Hungry: {Hungry}");
+            Console.WriteLine($"Happiness: {Happiness}");
+            Console.WriteLine($"Purity: {Purity}");
+            Console.WriteLine($"Sleep: {Sleep} \n");
 
-            Console.WriteLine($"1. Play with {GetName()}");
-            Console.WriteLine($"2. Feed {GetName()}");
-            Console.WriteLine($"3. Work {GetName()}");
-            Console.WriteLine($"4. Sleep {GetName()}");
-            Console.WriteLine($"5. Wash {GetName()}");
+            Console.WriteLine($"1. Play with {Name}");
+            Console.WriteLine($"2. Feed {Name}");
+            Console.WriteLine($"3. Work {Name}");
+            Console.WriteLine($"4. Sleep {Name}");
+            Console.WriteLine($"5. Wash {Name}");
             Console.WriteLine("6. Go to shop");
             Console.WriteLine("7. Save Game");
             Console.WriteLine("0. Exit to Main Menu");
@@ -162,7 +156,7 @@ namespace bieda_simsy.GameMechanics
                         YouMustWork(10, rand);
                         break;
                     case "4":
-                        Sleep(10, rand);
+                        GoToSleep(10, rand);
                         break;
                     case "5":
                         WashYourself(10, rand);
@@ -195,7 +189,7 @@ namespace bieda_simsy.GameMechanics
         private void ShopAssortment()
         {
             Console.Clear();
-            GetMoney();
+            Console.WriteLine($"Money: {Money}");
             Console.WriteLine("");
             Console.WriteLine("Welcome to the shop!");
             Console.WriteLine("1. Buy Food - 10 coins");

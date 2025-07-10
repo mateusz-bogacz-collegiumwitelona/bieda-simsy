@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Linq;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
-using bieda_simsy.GameMechanics.Abstract;
+﻿using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.GameMechanics.Interfaces;
 using bieda_simsy.GameMechanics.RandomEvents;
 using bieda_simsy.Saved.Interfaces;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class PlayerManager : StatMode, ISaved
+    internal class PlayerManager : StatModifier, ISaved, IStats, IStatsModifier
     {
         private string _name;
         private int _live;
@@ -47,6 +39,39 @@ namespace bieda_simsy.GameMechanics
             StartStatsDecay();
         }
 
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
+        }
+
+        public int Live => _live;
+        
+        public int Money => _money;
+        public int Hungry => _hungry;
+        public int Sleep => _sleep;
+        public int Happiness => _happiness;
+        public int Purity => _purity;
+
+        protected string SetName()
+        {
+            Console.Write("Enter your name: ");
+            _name = Console.ReadLine();
+            return _name;
+        }
+
+        protected void SetName(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                _name = name;
+            }
+            else
+            {
+                _name = "Unnamed";
+            }
+        }
+
         private void StartStatsDecay()
         {
             _startTimer = new Timer(DecayStats, null, 5000, 15000);
@@ -76,40 +101,6 @@ namespace bieda_simsy.GameMechanics
                     _isAlive = false;
                     CheckIfAlive();
                 }
-            }
-        }
-
-        protected string GetName() => _name;
-
-        protected int GetLive() => _live;
-
-        protected int GetMoney() => _money;
-
-        protected int GetHungry() => _hungry;
-
-        protected int GetSleep() => _sleep;
-
-        protected int GetHappiness() => _happiness;
-
-        protected int GetPurity() => _purity;
-
-        protected string SetName()
-        {
-            Console.Write("Enter your name: ");
-            string name = Console.ReadLine();
-            _name = name;
-            return _name;
-        }
-
-        protected void SetName(string name)
-        {
-            if (!string.IsNullOrEmpty(name))
-            {
-                _name = name;
-            }
-            else
-            {
-                _name = "Unnamed";
             }
         }
 
@@ -232,7 +223,7 @@ namespace bieda_simsy.GameMechanics
             Console.ReadKey();
         }
 
-        protected void Sleep(int value, int choice)
+        protected void GoToSleep(int value, int choice)
         {
             Console.Clear();
             lock (_lock)
