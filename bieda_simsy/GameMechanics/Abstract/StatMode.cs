@@ -14,9 +14,6 @@ namespace bieda_simsy.GameMechanics.Abstract
         protected int AddStats(int stats, int value)
         {
             stats += value;
-            int add = Math.Min(100, stats);
-
-            stats =+ add;
 
             if (stats > 100)
             {
@@ -28,13 +25,13 @@ namespace bieda_simsy.GameMechanics.Abstract
 
         protected int OddStats(int stats, int value)
         {
-            stats -= _random.Next(1, value);
+            stats -= _random.Next(1, value + 1);
             return Math.Max(0, stats);
         }
 
         protected int AddOddMoney()
         {
-            return _random.Next(1, 10);
+            return _random.Next(1, 11);
         }
         
         protected int LiveChanged(
@@ -46,7 +43,7 @@ namespace bieda_simsy.GameMechanics.Abstract
         {
             if (happiness <= 0 || hungry <= 0 || sleep <= 0)
             {
-                int lifeLoss = _random.Next(1, 5);
+                int lifeLoss = _random.Next(1, 6);
 
                 if (happiness <= 0 && hungry <= 0)
                 {
@@ -62,7 +59,7 @@ namespace bieda_simsy.GameMechanics.Abstract
             }
             else if (happiness == 100 && hungry == 100 && sleep == 100)
             {
-                int lifeGain = _random.Next(1, 5);
+                int lifeGain = _random.Next(1, 6);
                 return Math.Min(100, currentLive + lifeGain);
             }
 
@@ -71,7 +68,7 @@ namespace bieda_simsy.GameMechanics.Abstract
 
         protected int PayForSomething(int money, int cost)
         {
-            return money - cost;
+            return Math.Max(0, money - cost);
         }
 
         protected bool CanAfford(int money, int cost)

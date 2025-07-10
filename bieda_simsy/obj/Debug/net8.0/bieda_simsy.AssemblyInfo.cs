@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("bieda_simsy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06019593ae3e4db66394893f278d47fbdf84b12a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a226ace0c35186b337c9dbe5c34430e8461ea21")]
 [assembly: System.Reflection.AssemblyProductAttribute("bieda_simsy")]
 [assembly: System.Reflection.AssemblyTitleAttribute("bieda_simsy")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

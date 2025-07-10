@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.GameMechanics.RandomEvents;
 using bieda_simsy.Saved.Interfaces;
 
 namespace bieda_simsy.GameMechanics
@@ -80,7 +81,7 @@ namespace bieda_simsy.GameMechanics
 
         protected string GetName() => _name;
 
-        protected int GetLive() =>_live;
+        protected int GetLive() => _live;
 
         protected int GetMoney() => _money;
 
@@ -168,7 +169,7 @@ namespace bieda_simsy.GameMechanics
                 int oldPurity = _purity;
                 _money += moneyFromWork;
 
-                
+
 
                 _happiness = OddStats(_happiness, value);
                 _hungry = OddStats(_hungry, value);
@@ -313,96 +314,42 @@ namespace bieda_simsy.GameMechanics
 
         protected void RandomEvent(int choice)
         {
+            PositiveEvents positiveEvents = new PositiveEvents();
+            NegativeEvents negativeEvents = new NegativeEvents();
 
-            int change = 0;
-            int oldStat = 0;
+            Dictionary<string, int> eventResults;
 
-            Random random = new Random();
-            int randomEvent = random.Next(1, 6);
             switch (choice)
             {
                 case 1:
-                    switch(randomEvent)
-                    {
-                        case 1:
-                            change = AddOddMoney();
-                            _money += change;
-                            Console.WriteLine($"\n{_name} is to happy. They poop a gold\n+{change}\n");
-                            break;
-                        case 2:
-                            oldStat = _sleep;
-                            _sleep = AddStats(_sleep, 10);
-                            change = _sleep - oldStat;
-                            Console.WriteLine($"\n{_name} took a nap after eating. They sleep a lot\n+{change} sleep\n");
-                            break;
-                        case 3:
-                            change = AddOddMoney();
-                            _money += change;
-                            Console.WriteLine($"\n{_name} work too much, boss give extra money.\n+{change} coins\n");
-                            break;
-                        case 4:
-                            oldStat = _hungry;
-                            _hungry = AddStats(_hungry, 10);
-                            change = _hungry - oldStat;
-                            Console.WriteLine($"\n{_name} found a food under the bed.\n+{change} hungry\n");
-                            break;
-                        case 5:
-                            oldStat = _happiness;
-                            _happiness = AddStats(_happiness, 10);
-                            change = _happiness - oldStat;
-                            Console.WriteLine($"\n{_name} found a toy under in bath.\n+{change} happiness\n");
-                            break;
-                        case 6:
-                            change = AddOddMoney();
-                            _money -= change;
-                            Console.WriteLine($"\n {_name} found money.\n+{change} coins\n");
-                            break;
-                    }
+                    eventResults = positiveEvents.GeneratePositiveEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                    ApplyEventsResoult(eventResults);
                     break;
                 case 2:
-                    switch (randomEvent)
-                    {
-                        case 1:
-                            oldStat = _live;
-                            _live = OddStats(_live, 10);
-                            change = oldStat - _live;
-                            Console.WriteLine($"{_name} is sad. They poop a Nurgle poop\n-{change} live");
-                            break;
-                        case 2:
-                            oldStat = _purity;
-                            _purity = OddStats(_purity, 10);
-                            change = oldStat - _purity;
-                            Console.WriteLine($"{_name} pooped after eating.\n-{change} purity");
-                            break;
-                        case 3:
-                            oldStat = _happiness;
-                            _happiness = OddStats(_happiness, 10);
-                            change = oldStat - _happiness;
-                            Console.WriteLine($"{_name} boss is dumb.\n-{change} happiness");
-                            break;
-                        case 4:
-                            change = AddOddMoney();
-                            _money -= change;
-                            Console.WriteLine($"{_name} found a robber poop under the bed.\n-{change} coins");
-                            break;
-                        case 5:
-                            oldStat = _purity;
-                            _purity = OddStats(_purity, 10);
-                            change = oldStat - _purity;
-                            Console.WriteLine($"{_name} found a dirty toy under the bed.\n-{change} purity");
-                            break;
-                        case 6:
-                            change = AddOddMoney();
-                            _money -= change;
-                            oldStat = _happiness;
-                            _happiness = OddStats(_happiness, 10);
-                            int change2 = oldStat - _happiness;
-                            Console.WriteLine($"{_name} was robbed by robbed poop, its very stressfull.\n-{change} coins\n -{change2}");
-                            break;
-                    }
+                    eventResults = negativeEvents.GenerateNegativeEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                    ApplyEventsResoult(eventResults);
                     break;
                 default:
                     return;
+            }
+        }
+
+        private void ApplyEventsResoult(Dictionary<string, int> eventResults)
+        {
+            lock (_lock)
+            {
+                if (eventResults.ContainsKey("live"))
+                    _live = eventResults["live"];
+                if (eventResults.ContainsKey("money"))
+                    _money = eventResults["money"];
+                if (eventResults.ContainsKey("happiness"))
+                    _happiness = eventResults["happiness"];
+                if (eventResults.ContainsKey("hungry"))
+                    _hungry = eventResults["hungry"];
+                if (eventResults.ContainsKey("sleep"))
+                    _sleep = eventResults["sleep"];
+                if (eventResults.ContainsKey("purity"))
+                    _purity = eventResults["purity"];
             }
         }
     }
