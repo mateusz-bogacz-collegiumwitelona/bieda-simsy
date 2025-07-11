@@ -5,10 +5,12 @@ namespace bieda_simsy.GameMechanics.Abstract
     internal abstract class StatModifier : IStatsModifier
     {
         private readonly Random _random = new Random();
+        private const int MAX_STAT = 100;
+        private const int MIN_STAT = 0;
 
-        public int AddStats(int stats, int value) => Math.Min(stats + value, 100);   
+        public int AddStats(int stats, int value) => Math.Min(MAX_STAT, stats + _random.Next(1, value + 1));
 
-        public int OddStats(int stats, int value) => Math.Max(0, stats - _random.Next(value + 1));
+        public int OddStats(int stats, int value) => Math.Max(MIN_STAT, stats - _random.Next(1, value + 1));
 
         public int AddOddMoney() => _random.Next(1, 11);
         
@@ -49,5 +51,7 @@ namespace bieda_simsy.GameMechanics.Abstract
         public bool CanAfford(int money, int cost) => money >= cost;
 
         public bool IsDead(int life) => life <= 0;
+
+        protected int ClampStat(int value) => Math.Clamp(value, MIN_STAT, MAX_STAT);
     }
 }

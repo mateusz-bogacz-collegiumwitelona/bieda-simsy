@@ -98,6 +98,8 @@ namespace bieda_simsy.GameMechanics
 
         private void ShowPlayerOptionsMenu()
         {
+            DecayStats(Alive, Happiness, Hungry, Sleep, Purity);
+
             Console.Clear();
 
             MustPayTax();
@@ -146,19 +148,19 @@ namespace bieda_simsy.GameMechanics
                 switch (choice)
                 {
                     case "1":
-                        PlayWith(10, rand);
+                        PlayWith(10);
                         break;
                     case "2":
-                        Feed(10, rand);
+                        Feed(10);
                         break;
                     case "3":
-                        YouMustWork(10, rand);
+                        YouMustWork(10);
                         break;
                     case "4":
-                        GoToSleep(10, rand);
+                        GoToSleep(10);
                         break;
                     case "5":
-                        WashYourself(10, rand);
+                        WashYourself(10);
                         break;
                     case "6":
                         BuyItems();
@@ -220,16 +222,16 @@ namespace bieda_simsy.GameMechanics
                 switch (choice)
                 {
                     case "1":
-                        BuySomething("Food", 1, 10, 5, rand);
+                        BuySomething("Food", 1, 10, 5);
                         break;
                     case "2":
-                        BuySomething("Toys", 2, 10, 5, rand);
+                        BuySomething("Toys", 2, 10, 5);
                         break;
                     case "3":
-                        BuySomething("Coffe", 3, 10, 5, rand);
+                        BuySomething("Coffe", 3, 10, 5);
                         break;
                     case "4":
-                        BuySomething("Soup", 4, 10, 5, rand);
+                        BuySomething("Soup", 4, 10, 5);
                         ShowInfoAboutProducts();
                         break;
                     default:

@@ -43,12 +43,13 @@ namespace bieda_simsy.GameMechanics
         }
 
         public int Live => _live;
-        
+
         public int Money => _money;
         public int Hungry => _hungry;
         public int Sleep => _sleep;
         public int Happiness => _happiness;
         public int Purity => _purity;
+        public bool Alive => _isAlive;
 
         protected string SetName()
         {
@@ -70,28 +71,33 @@ namespace bieda_simsy.GameMechanics
         }
 
 
-        private void DecayStats(object state)
+        protected void DecayStats(
+            bool isAlive, 
+            int happiness, 
+            int hungry,
+            int sleep,
+            int purity)
         {
-                if (!_isAlive) return;
+            if (!_isAlive) return;
 
-                int happinessValue = 10;
-                int hungryValue = 10;
-                int sleepValue = 10;
-                int purityValue = 10;
+            int happinessValue = 10;
+            int hungryValue = 10;
+            int sleepValue = 10;
+            int purityValue = 10;
 
 
-                _happiness = OddStats(_happiness, happinessValue);
-                _hungry = OddStats(_hungry, hungryValue);
-                _sleep = OddStats(_sleep, sleepValue);
-                _purity = OddStats(_purity, purityValue);
+            _happiness = OddStats(_happiness, happinessValue);
+            _hungry = OddStats(_hungry, hungryValue);
+            _sleep = OddStats(_sleep, sleepValue);
+            _purity = OddStats(_purity, purityValue);
 
-                _live = LiveChanged(_happiness, _hungry, _sleep, _live);
+            _live = LiveChanged(_happiness, _hungry, _sleep, _live);
 
-                if (IsDead(_live))
-                {
-                    _isAlive = false;
-                    CheckIfAlive();
-                }
+            if (IsDead(_live))
+            {
+                _isAlive = false;
+                CheckIfAlive();
+            }
         }
 
         private void CheckIfAlive()
@@ -104,131 +110,113 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
-        protected void PlayWith(int value, int choice)
+        protected void PlayWith(int value)
         {
             Console.Clear();
-                            int oldHappiness = _happiness;
-                _happiness = AddStats(_happiness, value);
-                int happinessGained = _happiness - oldHappiness;
-                Console.WriteLine($"You played with {_name}. Happiness increased by {happinessGained}");
-            
-            RandomEvent(choice);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            int oldHappiness = _happiness;
+            _happiness = AddStats(_happiness, value);
+            int happinessGained = _happiness - oldHappiness;
+            Console.WriteLine($"You played with {_name}. Happiness increased by {happinessGained}");
+
+            PostAction();
         }
 
-        protected void Feed(int value, int choice)
+        protected void Feed(int value)
         {
-                int oldHungry = _hungry;
-                _hungry = AddStats(_hungry, value);
-                int hungryGained = _hungry - oldHungry;
-                Console.WriteLine($"You fed {_name}. Hunger increased by {hungryGained}");
-            RandomEvent(choice);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            int oldHungry = _hungry;
+            _hungry = AddStats(_hungry, value);
+            int hungryGained = _hungry - oldHungry;
+            Console.WriteLine($"You fed {_name}. Hunger increased by {hungryGained}");
+            PostAction();
         }
 
-        protected void YouMustWork(int value, int choice)
+        protected void YouMustWork(int value)
         {
             Console.Clear();
 
-                int moneyFromWork = AddOddMoney();
-                int oldHappiness = _happiness;
-                int oldHungry = _hungry;
-                int oldSleep = _sleep;
-                int oldPurity = _purity;
-                _money += moneyFromWork;
+            int moneyFromWork = AddOddMoney();
+            int oldHappiness = _happiness;
+            int oldHungry = _hungry;
+            int oldSleep = _sleep;
+            int oldPurity = _purity;
+            _money += moneyFromWork;
 
 
 
-                _happiness = OddStats(_happiness, value);
-                _hungry = OddStats(_hungry, value);
-                _sleep = OddStats(_sleep, value);
-                _purity = OddStats(_purity, value);
+            _happiness = OddStats(_happiness, value);
+            _hungry = OddStats(_hungry, value);
+            _sleep = OddStats(_sleep, value);
+            _purity = OddStats(_purity, value);
 
-                Console.WriteLine($"You worked and earned {moneyFromWork} money. Current money: {_money}");
-                Console.WriteLine($"But work is boring and you have:");
-                Console.WriteLine($" {_name} has lost {oldHappiness - _happiness} happiness,\n " +
-                                  $"{oldHungry - _hungry} hunger,\n " +
-                                  $"{oldSleep - _sleep} sleep,\n " +
-                                  $"{oldPurity - _purity} purity.");
+            Console.WriteLine($"You worked and earned {moneyFromWork} money. Current money: {_money}");
+            Console.WriteLine($"But work is boring and you have:");
+            Console.WriteLine($" {_name} has lost {oldHappiness - _happiness} happiness,\n " +
+                              $"{oldHungry - _hungry} hunger,\n " +
+                              $"{oldSleep - _sleep} sleep,\n " +
+                              $"{oldPurity - _purity} purity.");
 
-            RandomEvent(choice);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            PostAction();
         }
 
-        protected void BuySomething(string itemname, int choice, int price, int value, int rand)
+        protected void BuySomething(string itemname, int choice, int price, int value)
         {
 
             Console.Clear();
             if (CanAfford(_money, price))
             {
-                    _money = PayForSomething(_money, price);
-                    switch (choice)
-                    {
-                        case 1:
-                            _hungry = AddStats(_hungry, value);
-                            Console.WriteLine($"You bought {itemname}. {_name} current have {_hungry} of hungry");
-                            break;
-                        case 2:
-                            _happiness = AddStats(_happiness, value);
-                            Console.WriteLine($"You bought {itemname}. {_name} current have {_happiness} of happiness");
-                            break;
-                        case 3:
-                            _sleep = AddStats(_sleep, value);
-                            Console.WriteLine($"You bought {itemname}. {_name} current have {_sleep} of sleepness");
-                            break;
-                        case 4:
-                            _purity = AddStats(_purity, value);
-                            Console.WriteLine($"You bought {itemname}. {_name} current have {_purity} of purity");
-                            break;
-                        default:
-                            Console.WriteLine("Invalid choice.");
-                            break;
+                _money = PayForSomething(_money, price);
+                switch (choice)
+                {
+                    case 1:
+                        _hungry = AddStats(_hungry, value);
+                        Console.WriteLine($"You bought {itemname}. {_name} current have {_hungry} of hungry");
+                        break;
+                    case 2:
+                        _happiness = AddStats(_happiness, value);
+                        Console.WriteLine($"You bought {itemname}. {_name} current have {_happiness} of happiness");
+                        break;
+                    case 3:
+                        _sleep = AddStats(_sleep, value);
+                        Console.WriteLine($"You bought {itemname}. {_name} current have {_sleep} of sleepness");
+                        break;
+                    case 4:
+                        _purity = AddStats(_purity, value);
+                        Console.WriteLine($"You bought {itemname}. {_name} current have {_purity} of purity");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice.");
+                        break;
                 }
             }
             else
             {
                 Console.WriteLine("Not enough money to buy this item.");
             }
-            RandomEvent(rand);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            PostAction();
         }
 
-        protected void GoToSleep(int value, int choice)
-        {
-            Console.Clear();
-           
-                int oldSleep = _sleep;
-                _sleep = AddStats(_sleep, value);
-                int sleepGained = _sleep - oldSleep;
-                Console.WriteLine($"You slept. Sleep increased by {sleepGained}");
-
-            RandomEvent(choice);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
-        }
-
-        protected void WashYourself(int value, int choice)
+        protected void GoToSleep(int value)
         {
             Console.Clear();
 
-                int oldPurity = _purity;
-                _purity = AddStats(_purity, value);
-                int purityGained = _purity - oldPurity;
-                Console.WriteLine($"You washed yourself. Purity increased by {purityGained}");
+            int oldSleep = _sleep;
+            _sleep = AddStats(_sleep, value);
+            int sleepGained = _sleep - oldSleep;
+            Console.WriteLine($"You slept. Sleep increased by {sleepGained}");
 
-            RandomEvent(choice);
-            _actionToBill++;
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            PostAction();
+        }
+
+        protected void WashYourself(int value)
+        {
+            Console.Clear();
+
+            int oldPurity = _purity;
+            _purity = AddStats(_purity, value);
+            int purityGained = _purity - oldPurity;
+            Console.WriteLine($"You washed yourself. Purity increased by {purityGained}");
+
+            PostAction();
         }
 
         protected void MustPayTax()
@@ -244,18 +232,18 @@ namespace bieda_simsy.GameMechanics
 
         public void LoadData(Dictionary<string, object> data)
         {
-                _name = data["name"]?.ToString() ?? "Unnamed";
-                _live = Convert.ToInt32(data["live"]);
-                _money = Convert.ToInt32(data["money"]);
-                _happiness = Convert.ToInt32(data["happiness"]);
-                _hungry = Convert.ToInt32(data["hungry"]);
-                _sleep = Convert.ToInt32(data["sleep"]);
-                _isAlive = Convert.ToBoolean(data["isAlive"]);
+            _name = data["name"]?.ToString() ?? "Unnamed";
+            _live = Convert.ToInt32(data["live"]);
+            _money = Convert.ToInt32(data["money"]);
+            _happiness = Convert.ToInt32(data["happiness"]);
+            _hungry = Convert.ToInt32(data["hungry"]);
+            _sleep = Convert.ToInt32(data["sleep"]);
+            _isAlive = Convert.ToBoolean(data["isAlive"]);
         }
 
         public Dictionary<string, object> GetData()
         {
-                return new Dictionary<string, object>
+            return new Dictionary<string, object>
                 {
                     { "name", _name },
                     { "live", _live },
@@ -268,21 +256,23 @@ namespace bieda_simsy.GameMechanics
                 };
         }
 
-        protected void RandomEvent(int choice)
+        protected void GenerateRandomEvent()
         {
-            PositiveEvents positiveEvents = new PositiveEvents();
-            NegativeEvents negativeEvents = new NegativeEvents();
+            Random random = new Random();
+            int rand = random.Next(1,4);
 
+
+            RandomEvent randomEvent = new RandomEvent();
+            
             Dictionary<string, int> eventResults;
 
-            switch (choice)
+            switch (rand)
             {
                 case 1:
-                    eventResults = positiveEvents.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
-                    ApplyEventsResoult(eventResults);
+                    eventResults = randomEvent.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     break;
                 case 2:
-                    eventResults = negativeEvents.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                    eventResults = randomEvent.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     ApplyEventsResoult(eventResults);
                     break;
                 default:
@@ -292,21 +282,27 @@ namespace bieda_simsy.GameMechanics
 
         private void ApplyEventsResoult(Dictionary<string, int> eventResults)
         {
-            lock (_lock)
-            {
-                if (eventResults.ContainsKey("live"))
-                    _live = eventResults["live"];
-                if (eventResults.ContainsKey("money"))
-                    _money = eventResults["money"];
-                if (eventResults.ContainsKey("happiness"))
-                    _happiness = eventResults["happiness"];
-                if (eventResults.ContainsKey("hungry"))
-                    _hungry = eventResults["hungry"];
-                if (eventResults.ContainsKey("sleep"))
-                    _sleep = eventResults["sleep"];
-                if (eventResults.ContainsKey("purity"))
-                    _purity = eventResults["purity"];
-            }
+            if (eventResults.ContainsKey("live"))
+                _live = ClampStat(eventResults["live"]);
+            if (eventResults.ContainsKey("happiness"))
+                _happiness = ClampStat(eventResults["happiness"]);
+            if (eventResults.ContainsKey("hungry"))
+                _hungry = ClampStat(eventResults["hungry"]);
+            if (eventResults.ContainsKey("sleep"))
+                _sleep = ClampStat(eventResults["sleep"]);
+            if (eventResults.ContainsKey("purity"))
+                _purity = ClampStat(eventResults["purity"]);
+            if (eventResults.ContainsKey("money"))
+                _money = Math.Max(0, eventResults["money"]);
+
+        }
+
+        private void PostAction()
+        {
+            GenerateRandomEvent();
+            _actionToBill++;
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 }
