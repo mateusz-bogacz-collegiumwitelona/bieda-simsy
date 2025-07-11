@@ -22,6 +22,10 @@ namespace bieda_simsy
             }
         }
 
+
+        /// <summary>
+        /// Saves the game state to .json
+        /// </summary>
         public void SaveGame(ISaved game)
         {
             try
@@ -51,6 +55,9 @@ namespace bieda_simsy
             }
         }
 
+        /// <summary>
+        /// load game from .json 
+        /// </summary>
         public void LoadGame(ISaved game)
         {
             try
@@ -93,6 +100,9 @@ namespace bieda_simsy
             }
         }
 
+        /// <summary>
+        /// dwnloads a list of all game saves
+        /// </summary>
         public List<SavedInfo> GetAllSaves()
         {
             var saves = new List<SavedInfo>();
@@ -136,6 +146,9 @@ namespace bieda_simsy
             return saves.OrderByDescending(s => s.SaveDate).ToList();
         }
 
+        /// <summary>
+        /// delete save file
+        /// </summary>
         public void DeleteSave(string fileName)
         {
             try

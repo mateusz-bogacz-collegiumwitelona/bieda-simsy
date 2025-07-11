@@ -1,5 +1,8 @@
 ﻿namespace bieda_simsy.Saved.Models
 {
+    /// <summary>
+    /// game save information for the save list
+    /// </summary>
     public class SavedInfo
     {
         public String FileName { get; set; }

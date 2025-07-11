@@ -17,11 +17,15 @@ namespace bieda_simsy.GameMechanics
         private int _actionToBill;
         private int _purity;
 
-        private const int BASE_STATS = 10;
+        private const int BASE_STATS = 10; //base statistic value
 
         private EventEnum _event;
 
         public bool IsAlive => _isAlive;
+        
+        /// <summary>
+        /// name for save 
+        /// </summary>
         public string FileName =>
             string.IsNullOrEmpty(_name)
             ? "default_save"
@@ -40,6 +44,9 @@ namespace bieda_simsy.GameMechanics
             _purity = 100;
         }
 
+        /// <summary>
+        /// geters and setters
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -54,6 +61,10 @@ namespace bieda_simsy.GameMechanics
         public int Purity => _purity;
         public bool Alive => _isAlive;
 
+
+        /// <summary>
+        /// set player name
+        /// </summary>
         public string SetName()
         {
             Console.Write("Enter your name: ");
@@ -61,6 +72,9 @@ namespace bieda_simsy.GameMechanics
             return _name;
         }
 
+        /// <summary>
+        /// manual setting of the name from the parameter
+        /// </summary>
         public void SetName(string name)
         {
             if (!string.IsNullOrEmpty(name))
@@ -73,6 +87,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// reduce statistics after each action simulating the passage of time
+        /// </summary>
         public void DecayStats(bool isAlive, int happiness, int hungry, int sleep, int purity)
         {
             if (!_isAlive) return;
@@ -84,7 +101,7 @@ namespace bieda_simsy.GameMechanics
             _sleep = OddStats(_sleep, decayValue);
             _purity = OddStats(_purity, decayValue);
 
-            _live = LiveChanged(_happiness, _hungry, _sleep, _live);
+            _live = LiveChanged(_happiness, _hungry, _sleep, _live, _purity);
 
             if (IsDead(_live))
             {
@@ -92,6 +109,10 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+
+        /// <summary>
+        /// increst happiness stat
+        /// </summary>
         public void PlayWith(int value)
         {
             if (!_isAlive) return;
@@ -105,6 +126,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// increst food stat
+        /// </summary>
         public void Feed(int value)
         {
             if (!_isAlive) return;
@@ -117,6 +141,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// increst money but with cost of other stats
+        /// </summary>
         public void YouMustWork(int value)
         {
             if (!_isAlive) return;
@@ -146,8 +173,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
-        
-
+        /// <summary>
+        /// shop increst food stat
+        /// </summary>
         public void BuyFood(string itemName, int choice, int price, int value)
         {
             _money = PayForSomething(_money, price);
@@ -156,6 +184,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// shop increst happiness stat
+        /// </summary>
         public void BuyHappiness(string itemName, int choice, int price, int value)
         {
             _happiness = AddStats(_happiness, value);
@@ -163,6 +194,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// shop increst sleep stat
+        /// </summary>
         public void BuySleep(string itemName, int choice, int price, int value)
         {
             _sleep = AddStats(_sleep, value);
@@ -170,6 +204,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// shop increst purity stat
+        /// </summary>
         public void BuyPurity(string itemName, int choice, int price, int value)
         {
             _purity = AddStats(_purity, value);
@@ -177,7 +214,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
-
+        /// <summary>
+        /// increst sleep stat
+        /// </summary>
         public void GoToSleep(int value)
         {
             if (!_isAlive) return;
@@ -192,6 +231,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// increst purity stat
+        /// </summary>
         public void WashYourself(int value)
         {
             if (!_isAlive) return;
@@ -206,6 +248,9 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
+        /// <summary>
+        /// every 5 rounds a random amount of coins is deducted from the player
+        /// </summary>
         public void MustPayTax()
         {
             if (!_isAlive) return;
@@ -219,6 +264,10 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// loads the player's state from the specified data dictionary 
+        /// assigning values to the fields of the PlayerManager object
+        /// </summary>
         public void LoadData(Dictionary<string, object> data)
         {
             _name = data["name"]?.ToString() ?? "Unnamed";
@@ -231,6 +280,9 @@ namespace bieda_simsy.GameMechanics
             _isAlive = Convert.ToBoolean(data["isAlive"]);
         }
 
+        /// <summary>
+        /// returns the current state of the player as a key-value dictionary
+        /// </summary>
         public Dictionary<string, object> GetData()
         {
             return new Dictionary<string, object>
@@ -246,6 +298,10 @@ namespace bieda_simsy.GameMechanics
             };
         }
 
+        /// <summary>
+        /// generates a random event (good or bad) and applies its effects 
+        /// to the player's current stats
+        /// </summary>
         protected void GenerateRandomEvent()
         {
             Random random = new Random();
@@ -268,6 +324,10 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// Updates the player's statistics based on the results of the event, 
+        /// trimming the values to an acceptable range. 
+        /// </summary>
         private void ApplyEventsResoult(Dictionary<string, int> eventResults)
         {
             if (eventResults.ContainsKey("live"))
@@ -284,6 +344,12 @@ namespace bieda_simsy.GameMechanics
                 _money = Math.Max(0, eventResults["money"]);
         }
 
+
+        /// <summary>
+        /// triggers a random event, 
+        /// increments the countdown value to call the tax function 
+        /// and holds the game until the button is not pressed
+        /// </summary>
         public void PostAction()
         {
             GenerateRandomEvent();

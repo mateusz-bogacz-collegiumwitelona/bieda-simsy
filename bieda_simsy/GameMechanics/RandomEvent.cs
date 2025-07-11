@@ -10,6 +10,9 @@ namespace bieda_simsy.GameMechanics
     {
         private static Random _random = new Random();
 
+        /// <summary>
+        /// creates and processes a random event (good or bad) that modifies the player's statistics.
+        /// </summary>
         public Dictionary<string, int> GenerateEvent(
             EventEnum eventType,
             int live,
@@ -45,6 +48,9 @@ namespace bieda_simsy.GameMechanics
             return results;
         }
 
+        /// <summary>
+        /// increases random ststistics
+        /// </summary>
         private void GoodEvent(Dictionary<string, int> results, string name)
         {
             int change = _random.Next(1, 11);
@@ -84,6 +90,10 @@ namespace bieda_simsy.GameMechanics
                     break;
             }
         }
+
+        /// <summary>
+        /// reduces the random ststistics
+        /// </summary>
 
         private void BadEvent(Dictionary<string, int> results, string name)
         {

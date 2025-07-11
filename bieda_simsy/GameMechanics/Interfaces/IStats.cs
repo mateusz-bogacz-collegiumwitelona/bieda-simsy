@@ -1,5 +1,8 @@
 ﻿namespace bieda_simsy.GameMechanics.Interfaces
 {
+    /// <summary>
+    /// interface storing the definitions of getters and setters of ststats
+    /// </summary>
     internal interface IStats
     {
         string Name { get; set; }

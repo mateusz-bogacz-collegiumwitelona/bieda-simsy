@@ -1,5 +1,8 @@
 ﻿namespace bieda_simsy.Saved.Models
 {
+    /// <summary>
+    /// data model for saving the game state
+    /// </summary>
     public class SaveModel
     {
         public string Name { get; set; }

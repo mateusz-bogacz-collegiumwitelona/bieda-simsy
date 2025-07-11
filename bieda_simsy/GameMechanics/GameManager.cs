@@ -11,6 +11,7 @@ namespace bieda_simsy.GameMechanics
         private SaveManager _saveManager;
         private GameState _gameState;
 
+
         public GameManager()
         {
             _saveManager = new SaveManager();
@@ -18,6 +19,9 @@ namespace bieda_simsy.GameMechanics
             _player = null;
         }
 
+        /// <summary>
+        /// function to select a new game, load a game or exit
+        /// </summary>
         public void SetupGame()
         {
             ShowMainMenu();
@@ -47,6 +51,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// launch of a new game
+        /// </summary>
         private void StartNewGame()
         {
             _player = new PlayerManager();
@@ -54,6 +61,11 @@ namespace bieda_simsy.GameMechanics
             _player.SetName();
         }
 
+        /// <summary>
+        /// main game loop
+        /// displays the player's action menu and performs the selected actions
+        /// when the player dies, it exits the game and resets the game state
+        /// </summary>
         private void GameLoop()
         {
             while (_gameState == GameState.Started && _player != null && _player.IsAlive)
@@ -71,6 +83,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// show main menu
+        /// </summary>
         private void ShowMainMenu()
         {
             Console.Clear();
@@ -82,6 +97,9 @@ namespace bieda_simsy.GameMechanics
             Console.Write("Enter your choice: ");
         }
 
+        /// <summary>
+        /// Loading game form .json file
+        /// </summary>
         private void LoadGameMenu()
         {
             Console.Clear();
@@ -130,6 +148,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// show player menu and player stats
+        /// </summary>
         private void ShowPlayerOptionsMenu()
         {
             if (_player == null || !_player.IsAlive)
@@ -167,6 +188,9 @@ namespace bieda_simsy.GameMechanics
             Console.WriteLine("What is your choice?");
         }
 
+        /// <summary>
+        /// enable to select a specific action
+        /// </summary>
         private void ChoicePlayerOptions()
         {
             if (_player == null || !_player.IsAlive) return;
@@ -208,6 +232,10 @@ namespace bieda_simsy.GameMechanics
                     break;
             }
         }
+
+        /// <summary>
+        /// menu to save 
+        /// </summary>
         private void SaveGame()
         {
             if (_player == null)
@@ -222,6 +250,10 @@ namespace bieda_simsy.GameMechanics
             Console.ReadKey();
         }
 
+
+        /// <summary>
+        /// show shop assortment and and item price
+        /// </summary>
         private void ShopAssortment()
         {
             if (_player == null)
@@ -240,6 +272,10 @@ namespace bieda_simsy.GameMechanics
             Console.Write("What would you like to buy? ");
         }
 
+
+        /// <summary>
+        /// buing item logic
+        /// </summary>
         private void BuyItems()
         {
             if (_player == null || !_player.IsAlive)
@@ -279,6 +315,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// small help info for shoping
+        /// </summary>
         public void ShowInfoAboutProducts()
         {
             Console.Clear();
@@ -291,8 +330,16 @@ namespace bieda_simsy.GameMechanics
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// returns the name of the save file based on the player's name
+        /// if the player does not exist, returns “default_save”
+        /// </summary>
         public string FileName => _player?.Name ?? "default_save";
 
+        /// <summary>
+        /// collects and returns the player data as a dictionary
+        /// if the player does not exist, it returns an empty dictionary
+        /// </summary>
         public Dictionary<string, object> GetData()
         {
             if (_player == null)
@@ -313,6 +360,11 @@ namespace bieda_simsy.GameMechanics
             };
         }
 
+
+        /// <summary>
+        /// load playter save from .json
+        /// </summary>
+        /// <param name="data">Dictionaty GetData() </param>
         public void LoadData(Dictionary<string, object> data)
         {
             if (_player != null)
@@ -321,6 +373,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// parses the player's choice into the value of the PlayerOption enum
+        /// </summary>>
         private PlayerOption ParsePlayerOptions(string input)
         {
             return input switch
@@ -337,6 +392,9 @@ namespace bieda_simsy.GameMechanics
             };
         }
 
+        /// <summary>
+        /// parses the player's choice into the value of the MainMenuOption enum
+        /// </summary>>
         private MainMenuOption ParseMenuOption(string input)
         {
             return input switch
@@ -348,6 +406,9 @@ namespace bieda_simsy.GameMechanics
             };
         }
 
+        /// <summary>
+        /// parses the player's choice into the value of the ShopOptions enum
+        /// </summary>>
         private ShopOptions ParseShopOptions(string input)
         {
             return input switch
