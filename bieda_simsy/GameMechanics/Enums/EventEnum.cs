@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace bieda_simsy.GameMechanics.Enums
 {
-    internal enum GameState
+    internal enum EventEnum
     {
-        NotStarted,
-        Started,
-        Paused,
-        Finished
+        GoodEvent = 1 ,
+        BadEvent = 2 
     }
 }

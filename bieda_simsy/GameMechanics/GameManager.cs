@@ -20,34 +20,31 @@ namespace bieda_simsy.GameMechanics
 
         public void SetupGame()
         {
-            string choice;
+            ShowMainMenu();
 
-            do
+            string input = Console.ReadLine();
+
+            MainMenuOption option = ParseMenuOption(input);
+
+
+            switch (option)
             {
-                ShowMainMenu();
-                choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        StartNewGame();
-                        Console.Clear();
-                        GameLoop();
-                        break;
-                    case "2":
-                        LoadGameMenu();
-                        break;
-                    case "0":
-                        Console.WriteLine("Exiting the game. Goodbye!");
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please enter a valid option (0-2).");
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
-                        break;
-                }
-
-            } while (choice != "0");
+                case MainMenuOption.NewGame:
+                    StartNewGame();
+                    Console.Clear();
+                    GameLoop();
+                    break;
+                case MainMenuOption.LoadGame:
+                    LoadGameMenu();
+                    break;
+                case MainMenuOption.Exit:
+                    Console.WriteLine("Exiting the game. Goodbye!");
+                    break;
+                case MainMenuOption.None:
+                default:
+                    Console.WriteLine("Are you an idiot? Wrong choice");
+                    break;
+            }
         }
 
         private void StartNewGame()
@@ -166,43 +163,44 @@ namespace bieda_simsy.GameMechanics
             Console.WriteLine($"5. Wash {_player.Name}");
             Console.WriteLine("6. Go to shop");
             Console.WriteLine("7. Save Game");
-            Console.WriteLine("0. Exit to Main Menu");
+            Console.WriteLine("0. Exit");
             Console.WriteLine("What is your choice?");
         }
 
         private void ChoicePlayerOptions()
         {
-            if (_player == null || !_player.IsAlive)
-                return;
+            if (_player == null || !_player.IsAlive) return;
 
-            string choice = Console.ReadLine();
+            string input = Console.ReadLine();
+            PlayerOption option = ParsePlayerOptions(input);
 
-            switch (choice)
+            switch (option)
             {
-                case "1":
+                case PlayerOption.Play:
                     _player.PlayWith(20);
                     break;
-                case "2":
+                case PlayerOption.Feed:
                     _player.Feed(20);
                     break;
-                case "3":
+                case PlayerOption.Work:
                     _player.YouMustWork(20);
                     break;
-                case "4":
+                case PlayerOption.Sleep:
                     _player.GoToSleep(20);
                     break;
-                case "5":
+                case PlayerOption.Wash:
                     _player.WashYourself(20);
                     break;
-                case "6":
+                case PlayerOption.Shop:
                     BuyItems();
                     break;
-                case "7":
+                case PlayerOption.Save:
                     SaveGame();
                     break;
-                case "0":
+                case PlayerOption.Exit:
                     _gameState = GameState.NotStarted;
                     break;
+                case PlayerOption.None:
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     Console.WriteLine("Press any key to continue...");
@@ -210,7 +208,6 @@ namespace bieda_simsy.GameMechanics
                     break;
             }
         }
-
         private void SaveGame()
         {
             if (_player == null)
@@ -249,39 +246,37 @@ namespace bieda_simsy.GameMechanics
                 return;
 
             Console.Clear();
-            string choice;
+            
+            ShopAssortment();
+            
+            string input = Console.ReadLine();
+            
+            ShopOptions options = ParseShopOptions(input);
 
-            do
+            switch (options)
             {
-                ShopAssortment();
-                choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        _player.BuySomething("Food", 1, 10, 25);
-                        break;
-                    case "2":
-                        _player.BuySomething("Toys", 2, 10, 25);
-                        break;
-                    case "3":
-                        _player.BuySomething("Coffee", 3, 10, 25);
-                        break;
-                    case "4":
-                        _player.BuySomething("Soup", 4, 10, 25);
-                        break;
-                    case "5":
-                        ShowInfoAboutProducts();
-                        break;
-                    case "0":
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
-                        break;
-                }
-            } while (choice != "0");
+                case ShopOptions.Food:
+                    _player.BuyFood("Food", 1, 10, 25);
+                    break;
+                case ShopOptions.Happiness:
+                    _player.BuyHappiness("Toys", 2, 10, 25);
+                    break;
+                case ShopOptions.Sleep:
+                    _player.BuySleep("Coffee", 3, 10, 25);
+                    break;
+                case ShopOptions.Purity:
+                    _player.BuyPurity("Soup", 4, 10, 25);
+                    break;
+                case ShopOptions.Help:
+                    ShowInfoAboutProducts();
+                    break;
+                case ShopOptions.None:
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    break;
+            }
         }
 
         public void ShowInfoAboutProducts()
@@ -324,6 +319,46 @@ namespace bieda_simsy.GameMechanics
             {
                 _player.LoadData(data);
             }
+        }
+
+        private PlayerOption ParsePlayerOptions(string input)
+        {
+            return input switch
+            {
+                "1" => PlayerOption.Play,
+                "2" => PlayerOption.Feed,
+                "3" => PlayerOption.Work,
+                "4" => PlayerOption.Sleep,
+                "5" => PlayerOption.Wash,
+                "6" => PlayerOption.Shop,
+                "7" => PlayerOption.Save,
+                "0" => PlayerOption.Exit,
+                _ => PlayerOption.None,
+            };
+        }
+
+        private MainMenuOption ParseMenuOption(string input)
+        {
+            return input switch
+            {
+                "1" => MainMenuOption.NewGame,
+                "2" => MainMenuOption.LoadGame,
+                "3" => MainMenuOption.Exit,
+                _ => MainMenuOption.None,
+            };
+        }
+
+        private ShopOptions ParseShopOptions(string input)
+        {
+            return input switch
+            {
+                "1" => ShopOptions.Food,
+                "2" => ShopOptions.Happiness,
+                "3" => ShopOptions.Sleep,
+                "4" => ShopOptions.Purity,
+                "5" => ShopOptions.Help,
+                _ => ShopOptions.None
+            };
         }
     }
 }

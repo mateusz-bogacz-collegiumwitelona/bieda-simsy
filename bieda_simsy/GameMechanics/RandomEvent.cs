@@ -1,4 +1,5 @@
 ﻿using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace bieda_simsy.GameMechanics
         private static Random _random = new Random();
 
         public Dictionary<string, int> GenerateEvent(
+            EventEnum eventType,
             int live,
             int money,
             int happiness,
@@ -29,18 +31,15 @@ namespace bieda_simsy.GameMechanics
                 {"purity", purity}
             };
 
-            if (_random.Next(1, 101) <= 25)
+            switch (eventType)
             {
-                bool isGoodEvent = _random.Next(1, 101) <= 60;
-
-                if (isGoodEvent)
-                {
+                case EventEnum.GoodEvent:
                     GoodEvent(results, name);
-                }
-                else
-                {
+                    break;
+
+                case EventEnum.BadEvent:
                     BadEvent(results, name);
-                }
+                    break;
             }
 
             return results;

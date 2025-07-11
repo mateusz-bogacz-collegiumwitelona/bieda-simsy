@@ -1,4 +1,5 @@
 ﻿using bieda_simsy.GameMechanics.Abstract;
+using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
 using bieda_simsy.Saved.Interfaces;
 
@@ -17,6 +18,8 @@ namespace bieda_simsy.GameMechanics
         private int _purity;
 
         private const int BASE_STATS = 10;
+
+        private EventEnum _event;
 
         public bool IsAlive => _isAlive;
         public string FileName =>
@@ -143,45 +146,37 @@ namespace bieda_simsy.GameMechanics
             PostAction();
         }
 
-        public void BuySomething(string itemname, int choice, int price, int value)
+        
+
+        public void BuyFood(string itemName, int choice, int price, int value)
         {
-            Console.Clear();
-            if (!_isAlive) return;
-
-            if (!CanAfford(_money, price))
-            {
-                Console.WriteLine("Not enough money to buy this item!");
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-                return;
-            }
-
             _money = PayForSomething(_money, price);
-
-            switch (choice)
-            {
-                case 1:
-                    _hungry = AddStats(_hungry, value);
-                    Console.WriteLine($"You bought {itemname}. {_name} now has {_hungry} hunger");
-                    break;
-                case 2:
-                    _happiness = AddStats(_happiness, value);
-                    Console.WriteLine($"You bought {itemname}. {_name} now has {_happiness} happiness");
-                    break;
-                case 3:
-                    _sleep = AddStats(_sleep, value);
-                    Console.WriteLine($"You bought {itemname}. {_name} now has {_sleep} energy");
-                    break;
-                case 4:
-                    _purity = AddStats(_purity, value);
-                    Console.WriteLine($"You bought {itemname}. {_name} now has {_purity} purity");
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice.");
-                    break;
-            }
+            _hungry = AddStats(_hungry, value);
+            Console.WriteLine($"You bought {itemName}. {_name} now has {_hungry} hunger");
             PostAction();
         }
+
+        public void BuyHappiness(string itemName, int choice, int price, int value)
+        {
+            _happiness = AddStats(_happiness, value);
+            Console.WriteLine($"You bought {itemName}. {_name} now has {_happiness} happiness");
+            PostAction();
+        }
+
+        public void BuySleep(string itemName, int choice, int price, int value)
+        {
+            _sleep = AddStats(_sleep, value);
+            Console.WriteLine($"You bought {itemName}. {_name} now has {_sleep} energy");
+            PostAction();
+        }
+
+        public void BuyPurity(string itemName, int choice, int price, int value)
+        {
+            _purity = AddStats(_purity, value);
+            Console.WriteLine($"You bought {itemName}. {_name} now has {_purity} purity");
+            PostAction();
+        }
+
 
         public void GoToSleep(int value)
         {
@@ -254,19 +249,18 @@ namespace bieda_simsy.GameMechanics
         protected void GenerateRandomEvent()
         {
             Random random = new Random();
-            int rand = random.Next(1, 4);
-
+            EventEnum eventEnum = (EventEnum)random.Next(1, 3);
             RandomEvent randomEvent = new RandomEvent();
             Dictionary<string, int> eventResults;
 
-            switch (rand)
+            switch (eventEnum)
             {
-                case 1:
-                    eventResults = randomEvent.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                case EventEnum.GoodEvent:
+                    eventResults = randomEvent.GenerateEvent(eventEnum, _live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     ApplyEventsResoult(eventResults);
                     break;
-                case 2:
-                    eventResults = randomEvent.GenerateEvent(_live, _money, _happiness, _hungry, _sleep, _purity, _name);
+                case EventEnum.BadEvent:
+                    eventResults = randomEvent.GenerateEvent(eventEnum, _live, _money, _happiness, _hungry, _sleep, _purity, _name);
                     ApplyEventsResoult(eventResults);
                     break;
                 default:
@@ -290,7 +284,7 @@ namespace bieda_simsy.GameMechanics
                 _money = Math.Max(0, eventResults["money"]);
         }
 
-        private void PostAction()
+        public void PostAction()
         {
             GenerateRandomEvent();
             _actionToBill++;

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace bieda_simsy.GameMechanics.Enums
 {
-    internal enum GameState
+    internal enum ShopOptions
     {
-        NotStarted,
-        Started,
-        Paused,
-        Finished
+        Food,
+        Happiness,
+        Sleep,
+        Purity,
+        Help,
+        None,
     }
 }
