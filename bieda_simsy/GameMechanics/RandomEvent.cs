@@ -3,7 +3,7 @@ using bieda_simsy.GameMechanics.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace bieda_simsy.GameMechanics.RandomEvents
+namespace bieda_simsy.GameMechanics
 {
     internal class RandomEvent : StatModifier
     {
