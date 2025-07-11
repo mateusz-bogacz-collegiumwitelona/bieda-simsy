@@ -5,29 +5,12 @@ namespace bieda_simsy.GameMechanics.Abstract
     internal abstract class StatModifier : IStatsModifier
     {
         private readonly Random _random = new Random();
-        
-        public int AddStats(int stats, int value)
-        {
-            stats += value;
 
-            if (stats > 100)
-            {
-                stats = 100;
-            }
+        public int AddStats(int stats, int value) => Math.Min(stats + value, 100);   
 
-            return stats;
-        }
+        public int OddStats(int stats, int value) => Math.Max(0, stats - _random.Next(value + 1));
 
-        public int OddStats(int stats, int value)
-        {
-            stats -= _random.Next(1, value + 1);
-            return Math.Max(0, stats);
-        }
-
-        public int AddOddMoney()
-        {
-            return _random.Next(1, 11);
-        }
+        public int AddOddMoney() => _random.Next(1, 11);
         
         public int LiveChanged(
             int happiness, 
@@ -61,19 +44,10 @@ namespace bieda_simsy.GameMechanics.Abstract
             return currentLive;
         }
 
-        public int PayForSomething(int money, int cost)
-        {
-            return Math.Max(0, money - cost);
-        }
+        public int PayForSomething(int money, int cost) => Math.Max(0, money - cost);
 
-        public bool CanAfford(int money, int cost)
-        {
-            return money >= cost;
-        }
+        public bool CanAfford(int money, int cost) => money >= cost;
 
-        public bool IsDead(int life)
-        {
-            return life <= 0;
-        }
+        public bool IsDead(int life) => life <= 0;
     }
 }

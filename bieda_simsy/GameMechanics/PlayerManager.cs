@@ -5,7 +5,7 @@ using bieda_simsy.Saved.Interfaces;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class PlayerManager : StatModifier, ISaved, IStats, IStatsModifier, IEvents
+    internal class PlayerManager : StatModifier, ISaved, IStats, IStatsModifier
     {
         private string _name;
         private int _live;
@@ -14,7 +14,6 @@ namespace bieda_simsy.GameMechanics
         private int _hungry;
         private int _sleep;
         private bool _isAlive;
-        private Timer _startTimer;
         private int _actionToBill;
         private readonly object _lock = new object();
         private int _purity;
@@ -35,8 +34,6 @@ namespace bieda_simsy.GameMechanics
             _sleep = 100;
             _actionToBill = 0;
             _purity = 100;
-
-            StartStatsDecay();
         }
 
         public string Name
@@ -72,15 +69,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
-        private void StartStatsDecay()
-        {
-            _startTimer = new Timer(DecayStats, null, 5000, 15000);
-        }
 
         private void DecayStats(object state)
         {
-            lock (_lock)
-            {
                 if (!_isAlive) return;
 
                 int happinessValue = 10;
@@ -101,14 +92,12 @@ namespace bieda_simsy.GameMechanics
                     _isAlive = false;
                     CheckIfAlive();
                 }
-            }
         }
 
         private void CheckIfAlive()
         {
             if (_isAlive)
             {
-                _startTimer?.Dispose();
                 Console.WriteLine($"\n{_name} has died. Game over.");
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
@@ -118,13 +107,11 @@ namespace bieda_simsy.GameMechanics
         protected void PlayWith(int value, int choice)
         {
             Console.Clear();
-            lock (_lock)
-            {
-                int oldHappiness = _happiness;
+                            int oldHappiness = _happiness;
                 _happiness = AddStats(_happiness, value);
                 int happinessGained = _happiness - oldHappiness;
                 Console.WriteLine($"You played with {_name}. Happiness increased by {happinessGained}");
-            }
+            
             RandomEvent(choice);
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
@@ -133,14 +120,10 @@ namespace bieda_simsy.GameMechanics
 
         protected void Feed(int value, int choice)
         {
-            Console.Clear();
-            lock (_lock)
-            {
                 int oldHungry = _hungry;
                 _hungry = AddStats(_hungry, value);
                 int hungryGained = _hungry - oldHungry;
                 Console.WriteLine($"You fed {_name}. Hunger increased by {hungryGained}");
-            }
             RandomEvent(choice);
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
@@ -151,8 +134,6 @@ namespace bieda_simsy.GameMechanics
         {
             Console.Clear();
 
-            lock (_lock)
-            {
                 int moneyFromWork = AddOddMoney();
                 int oldHappiness = _happiness;
                 int oldHungry = _hungry;
@@ -173,7 +154,7 @@ namespace bieda_simsy.GameMechanics
                                   $"{oldHungry - _hungry} hunger,\n " +
                                   $"{oldSleep - _sleep} sleep,\n " +
                                   $"{oldPurity - _purity} purity.");
-            }
+
             RandomEvent(choice);
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
@@ -186,8 +167,6 @@ namespace bieda_simsy.GameMechanics
             Console.Clear();
             if (CanAfford(_money, price))
             {
-                lock (_lock)
-                {
                     _money = PayForSomething(_money, price);
                     switch (choice)
                     {
@@ -210,7 +189,6 @@ namespace bieda_simsy.GameMechanics
                         default:
                             Console.WriteLine("Invalid choice.");
                             break;
-                    }
                 }
             }
             else
@@ -226,13 +204,12 @@ namespace bieda_simsy.GameMechanics
         protected void GoToSleep(int value, int choice)
         {
             Console.Clear();
-            lock (_lock)
-            {
+           
                 int oldSleep = _sleep;
                 _sleep = AddStats(_sleep, value);
                 int sleepGained = _sleep - oldSleep;
                 Console.WriteLine($"You slept. Sleep increased by {sleepGained}");
-            }
+
             RandomEvent(choice);
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
@@ -242,22 +219,16 @@ namespace bieda_simsy.GameMechanics
         protected void WashYourself(int value, int choice)
         {
             Console.Clear();
-            lock (_lock)
-            {
+
                 int oldPurity = _purity;
                 _purity = AddStats(_purity, value);
                 int purityGained = _purity - oldPurity;
                 Console.WriteLine($"You washed yourself. Purity increased by {purityGained}");
-            }
+
             RandomEvent(choice);
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
-        }
-
-        public void Dispose()
-        {
-            _startTimer?.Dispose();
         }
 
         protected void MustPayTax()
@@ -273,8 +244,6 @@ namespace bieda_simsy.GameMechanics
 
         public void LoadData(Dictionary<string, object> data)
         {
-            lock (_lock)
-            {
                 _name = data["name"]?.ToString() ?? "Unnamed";
                 _live = Convert.ToInt32(data["live"]);
                 _money = Convert.ToInt32(data["money"]);
@@ -282,13 +251,10 @@ namespace bieda_simsy.GameMechanics
                 _hungry = Convert.ToInt32(data["hungry"]);
                 _sleep = Convert.ToInt32(data["sleep"]);
                 _isAlive = Convert.ToBoolean(data["isAlive"]);
-            }
         }
 
         public Dictionary<string, object> GetData()
         {
-            lock (_lock)
-            {
                 return new Dictionary<string, object>
                 {
                     { "name", _name },
@@ -300,7 +266,6 @@ namespace bieda_simsy.GameMechanics
                     { "purity", _purity },
                     { "isAlive", _isAlive }
                 };
-            }
         }
 
         protected void RandomEvent(int choice)

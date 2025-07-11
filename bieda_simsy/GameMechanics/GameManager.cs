@@ -32,7 +32,6 @@ namespace bieda_simsy.GameMechanics
                         break;
                     case "0":
                         Console.WriteLine("Exiting the game. Goodbye!");
-                        Dispose();
                         break;
                     default:
                         Console.WriteLine("Are you a idiot? Please enter a valid option (0-2).");
