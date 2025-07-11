@@ -24,7 +24,7 @@ namespace bieda_simsy.GameMechanics
             string name
             )
         {
-            Dictionary<string, int> results = new Dictionary<string, int>
+            var results = new Dictionary<string, int>
             {
                 {"live", live},
                 {"money", money},
