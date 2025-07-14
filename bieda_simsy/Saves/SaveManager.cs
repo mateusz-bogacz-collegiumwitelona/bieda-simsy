@@ -1,21 +1,25 @@
 ﻿using bieda_simsy.Saved.Interfaces;
 using bieda_simsy.Saved.Models;
+using bieda_simsy.Saves.Models;
 using System.Text.Json;
 
 namespace bieda_simsy
 {
     internal class SaveManager
     {
-        private static readonly string SaveDirectory = "saves";
-        private static readonly string SaveExtension = ".json";
+        private static string SaveDirectory;
+        private static string SaveExtension;
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        public SaveManager()
+        public SaveManager(SaveSettings settings)
         {
+            SaveDirectory = settings.Directory;
+            SaveExtension = settings.Extension;
+
             if (!Directory.Exists(SaveDirectory))
             {
                 Directory.CreateDirectory(SaveDirectory);

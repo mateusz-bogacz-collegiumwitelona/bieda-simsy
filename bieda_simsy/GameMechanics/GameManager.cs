@@ -1,6 +1,8 @@
 ﻿using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
+using bieda_simsy.GameMechanics.Models;
 using bieda_simsy.Saved.Interfaces;
+using bieda_simsy.Saves.Models;
 using System.Xml.Linq;
 
 namespace bieda_simsy.GameMechanics
@@ -10,11 +12,17 @@ namespace bieda_simsy.GameMechanics
         private PlayerManager? _player;
         private SaveManager _saveManager;
         private GameState _gameState;
+        private readonly PlayerDefaults _playerDefaults;
+        private readonly SaveSettings _saveSettings;
 
-
-        public GameManager()
+        public GameManager(
+            PlayerDefaults playerDefaults,
+            SaveSettings saveSettings
+            )
         {
-            _saveManager = new SaveManager();
+            _playerDefaults = playerDefaults;
+            _saveSettings = saveSettings;
+            _saveManager = new SaveManager(saveSettings);
             _gameState = GameState.NotStarted;
             _player = null;
         }
@@ -24,6 +32,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void SetupGame()
         {
+            Console.WriteLine(">> SetupGame started");
             ShowMainMenu();
 
             string input = Console.ReadLine();
@@ -56,7 +65,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         private void StartNewGame()
         {
-            _player = new PlayerManager();
+            _player = new PlayerManager(_playerDefaults);
             _gameState = GameState.Started;
             _player.SetName();
         }
@@ -131,7 +140,7 @@ namespace bieda_simsy.GameMechanics
             {
                 var selectedSave = saves[index - 1];
 
-                _player = new PlayerManager();
+                _player = new PlayerManager(_playerDefaults);
                 _player.SetName(selectedSave.PlayerName);
                 _saveManager.LoadGame(_player);
                 _gameState = GameState.Started;

@@ -1,6 +1,7 @@
 ﻿using bieda_simsy.GameMechanics.Abstract;
 using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
+using bieda_simsy.GameMechanics.Models;
 using bieda_simsy.Saved.Interfaces;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
@@ -44,6 +45,19 @@ namespace bieda_simsy.GameMechanics
             _sleep = 100;
             _actionToBill = 0;
             _purity = 100;
+        }
+
+        public PlayerManager(PlayerDefaults defaults)
+        {
+            _name = defaults.Name;
+            _live = defaults.Live;
+            _money = defaults.Money;
+            _happiness = defaults.Happiness;
+            _hungry = defaults.Hungry;
+            _sleep = defaults.Sleep;
+            _purity = defaults.Purity;
+            _actionToBill = 0;
+            _isAlive = defaults.IsAlive;
         }
 
         /// <summary>
@@ -122,7 +136,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void PlayWith(int value)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             Console.Clear();
             int oldHappiness = _happiness;
@@ -138,7 +156,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void Feed(int value)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             Console.Clear();
             int oldHungry = _hungry;
@@ -153,7 +175,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void YouMustWork(int value)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             Console.Clear();
 
@@ -230,7 +256,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void GoToSleep(int value)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             Console.Clear();
 
@@ -247,7 +277,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void WashYourself(int value)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             Console.Clear();
 
@@ -264,7 +298,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void MustPayTax()
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             if (_actionToBill >= 5)
             {
