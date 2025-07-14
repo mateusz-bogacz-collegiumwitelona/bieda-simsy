@@ -76,10 +76,12 @@ namespace bieda_simsy.GameMechanics
 
             if (_player != null && !_player.IsAlive)
             {
-                Console.WriteLine($"\n{_player.Name} has died. Game over.");
-                Console.WriteLine("Press any key to return to main menu...");
-                Console.ReadKey();
+                _player.ShowDeadScreen();
+                _player = null;
                 _gameState = GameState.NotStarted;
+                Console.WriteLine("\nPress any key to continue...");
+                Console.ReadLine();
+                SetupGame();
             }
         }
 
@@ -163,7 +165,7 @@ namespace bieda_simsy.GameMechanics
                 _player.Hungry,
                 _player.Sleep,
                 _player.Purity
-            );
+                );
 
             Console.Clear();
 

@@ -3,6 +3,7 @@ using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
 using bieda_simsy.Saved.Interfaces;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace bieda_simsy.GameMechanics
 {
@@ -93,7 +94,11 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void DecayStats(bool isAlive, int happiness, int hungry, int sleep, int purity)
         {
-            if (!_isAlive) return;
+            if (!_isAlive)
+            {
+                ShowDeadScreen();
+                return;
+            }
 
             int decayValue = 5;
 
@@ -107,6 +112,7 @@ namespace bieda_simsy.GameMechanics
             if (IsDead(_live))
             {
                 _isAlive = false;
+                Console.WriteLine($"\n{_name} is critically ill!");
             }
         }
 
@@ -364,6 +370,9 @@ namespace bieda_simsy.GameMechanics
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// function to check if a player can afford
+        /// </summary>
         private void CanIByu(int money, int prince)
         {
             if (!CanAfford(money, prince))
@@ -372,6 +381,15 @@ namespace bieda_simsy.GameMechanics
                 return;
             }
         }
-        
+
+        public void ShowDeadScreen()
+        {
+            Console.Clear();
+            Console.WriteLine("<---- GAME OVER ---->");
+            Console.WriteLine($"{_name} has died...");
+            Console.WriteLine($"Final Stats");
+            Console.WriteLine($"Money: {_money}");
+            Console.WriteLine($"Days survived: {Math.Ceiling((decimal)_actionToBill / 5)}");
+        }
     }
 }
