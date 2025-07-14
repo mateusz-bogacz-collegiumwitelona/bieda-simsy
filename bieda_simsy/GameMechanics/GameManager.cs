@@ -130,7 +130,8 @@ namespace bieda_simsy.GameMechanics
                 var selectedSave = saves[index - 1];
 
                 _player = new PlayerManager();
-                _saveManager.LoadGame(this);
+                _player.SetName(selectedSave.PlayerName);
+                _saveManager.LoadGame(_player);
                 _gameState = GameState.Started;
 
                 Console.Clear();
@@ -401,7 +402,7 @@ namespace bieda_simsy.GameMechanics
             {
                 "1" => MainMenuOption.NewGame,
                 "2" => MainMenuOption.LoadGame,
-                "3" => MainMenuOption.Exit,
+                "0" => MainMenuOption.Exit,
                 _ => MainMenuOption.None,
             };
         }

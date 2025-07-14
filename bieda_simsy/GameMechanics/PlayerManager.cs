@@ -2,6 +2,7 @@
 using bieda_simsy.GameMechanics.Enums;
 using bieda_simsy.GameMechanics.Interfaces;
 using bieda_simsy.Saved.Interfaces;
+using System.Diagnostics;
 
 namespace bieda_simsy.GameMechanics
 {
@@ -178,6 +179,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyFood(string itemName, int choice, int price, int value)
         {
+            CanIByu(_money, price);
             _money = PayForSomething(_money, price);
             _hungry = AddStats(_hungry, value);
             Console.WriteLine($"You bought {itemName}. {_name} now has {_hungry} hunger");
@@ -189,6 +191,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyHappiness(string itemName, int choice, int price, int value)
         {
+            CanIByu(_money, price);
             _happiness = AddStats(_happiness, value);
             Console.WriteLine($"You bought {itemName}. {_name} now has {_happiness} happiness");
             PostAction();
@@ -199,6 +202,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuySleep(string itemName, int choice, int price, int value)
         {
+            CanIByu(_money, price);
             _sleep = AddStats(_sleep, value);
             Console.WriteLine($"You bought {itemName}. {_name} now has {_sleep} energy");
             PostAction();
@@ -209,6 +213,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyPurity(string itemName, int choice, int price, int value)
         {
+            CanIByu(_money, price);
             _purity = AddStats(_purity, value);
             Console.WriteLine($"You bought {itemName}. {_name} now has {_purity} purity");
             PostAction();
@@ -258,6 +263,7 @@ namespace bieda_simsy.GameMechanics
             if (_actionToBill >= 5)
             {
                 int tax = AddOddMoney();
+                CanIByu(_money, tax);
                 Console.WriteLine($"You must pay tax - {tax} coins");
                 _money = PayForSomething(_money, tax);
                 _actionToBill = 0;
@@ -350,12 +356,22 @@ namespace bieda_simsy.GameMechanics
         /// increments the countdown value to call the tax function 
         /// and holds the game until the button is not pressed
         /// </summary>
-        public void PostAction()
+        private void PostAction()
         {
             GenerateRandomEvent();
             _actionToBill++;
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
+
+        private void CanIByu(int money, int prince)
+        {
+            if (!CanAfford(money, prince))
+            {
+                throw new Exception("You don't have enought money");
+                return;
+            }
+        }
+        
     }
 }
