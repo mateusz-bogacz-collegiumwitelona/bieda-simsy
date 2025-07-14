@@ -34,6 +34,9 @@ namespace bieda_simsy.GameMechanics
             ? "default_save"
             : _name.ToLower().Replace(" ", "_");
 
+        /// <summary>
+        /// basic constructor
+        /// </summary>
         public PlayerManager()
         {
             _name = string.Empty;
@@ -47,6 +50,11 @@ namespace bieda_simsy.GameMechanics
             _purity = 100;
         }
 
+        /// <summary>
+        /// constructor implements PlayerDefaults
+        /// PlayerDefaults base stats for new game
+        /// </summary>
+        /// <param name="defaults"></param>
         public PlayerManager(PlayerDefaults defaults)
         {
             _name = defaults.Name;
@@ -420,6 +428,9 @@ namespace bieda_simsy.GameMechanics
             }
         }
 
+        /// <summary>
+        /// basic dead screen 
+        /// </summary>
         public void ShowDeadScreen()
         {
             Console.Clear();

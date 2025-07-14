@@ -15,6 +15,9 @@ namespace bieda_simsy.GameMechanics
         private readonly PlayerDefaults _playerDefaults;
         private readonly SaveSettings _saveSettings;
 
+        /// <summary>
+        /// constructor who implements PlayerDefaults and SaveSettings
+        /// </summary>
         public GameManager(
             PlayerDefaults playerDefaults,
             SaveSettings saveSettings

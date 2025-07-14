@@ -4,7 +4,7 @@ using bieda_simsy.GameMechanics.Settings;
 using System.Text.Json;
 
 
-
+/// catch errors with import
 try
 {
     var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace bieda_simsy.GameMechanics.Settings
 {
+    /// <summary>
+    /// model to implements SaveSettings and PlayerDefaults
+    /// </summary>
     internal class AppSettings
     {
         public SaveSettings SaveSettings { get; set; }

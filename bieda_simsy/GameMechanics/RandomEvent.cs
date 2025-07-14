@@ -94,7 +94,6 @@ namespace bieda_simsy.GameMechanics
         /// <summary>
         /// reduces the random ststistics
         /// </summary>
-
         private void BadEvent(Dictionary<string, int> results, string name)
         {
             int change = _random.Next(1, 11);

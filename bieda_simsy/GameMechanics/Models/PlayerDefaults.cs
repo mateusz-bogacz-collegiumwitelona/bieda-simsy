@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace bieda_simsy.GameMechanics.Models
 {
+    /// <summary>
+    /// default player stats
+    /// </summary>
     internal class PlayerDefaults
     {
         public string Name { get; set; } = "";

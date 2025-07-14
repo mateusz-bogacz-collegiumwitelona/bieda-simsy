@@ -15,6 +15,11 @@ namespace bieda_simsy
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
+        /// <summary>
+        /// constructor
+        /// declares properties from SaveSettings
+        /// </summary>
+        /// <param name="settings"></param>
         public SaveManager(SaveSettings settings)
         {
             SaveDirectory = settings.Directory;
