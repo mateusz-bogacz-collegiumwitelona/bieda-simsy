@@ -1,54 +1,30 @@
-﻿using bieda_simsy.GameMechanics.Abstract;
-using bieda_simsy.GameMechanics.Enums;
-using bieda_simsy.GameMechanics.Interfaces;
+﻿using bieda_simsy.GameMechanics.Interfaces;
 using bieda_simsy.GameMechanics.Models;
 using bieda_simsy.Saved.Interfaces;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
 
 namespace bieda_simsy.GameMechanics
 {
     internal class PlayerManager : ISaved, IStats
     {
-        private string _name;
-        private int _live;
-        private int _money;
-        private int _happiness;
-        private int _hungry;
-        private int _sleep;
-        private bool _isAlive;
-        private int _actionToBill;
-        private int _purity;
-
-        private const int BASE_STATS = 10; //base statistic value
-
-        private EventEnum _event;
+        private Player _player;
         private StatModifier _modifier;
-
-        public bool IsAlive => _isAlive;
+        private const int BASE_STATS = 10; //base statistic value
+        public bool IsAlive => _player.IsAlive;
         
         /// <summary>
         /// name for save 
         /// </summary>
         public string FileName =>
-            string.IsNullOrEmpty(_name)
+            string.IsNullOrEmpty(_player.Name)
             ? "default_save"
-            : _name.ToLower().Replace(" ", "_");
+            : _player.Name.ToLower().Replace(" ", "_");
 
         /// <summary>
         /// basic constructor
         /// </summary>
         public PlayerManager()
         {
-            _name = string.Empty;
-            _live = 100;
-            _money = 10;
-            _happiness = 100;
-            _hungry = 100;
-            _isAlive = true;
-            _sleep = 100;
-            _actionToBill = 0;
-            _purity = 100;
+            _player = new Player();
             _modifier = new StatModifier();
         }
 
@@ -59,15 +35,7 @@ namespace bieda_simsy.GameMechanics
         /// <param name="defaults"></param>
         public PlayerManager(PlayerDefaults defaults)
         {
-            _name = defaults.Name;
-            _live = defaults.Live;
-            _money = defaults.Money;
-            _happiness = defaults.Happiness;
-            _hungry = defaults.Hungry;
-            _sleep = defaults.Sleep;
-            _purity = defaults.Purity;
-            _actionToBill = 0;
-            _isAlive = defaults.IsAlive;
+            _player = new Player(defaults);
             _modifier = new StatModifier();
         }
 
@@ -76,17 +44,17 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public string Name
         {
-            get => _name;
-            set => _name = value;
+            get => _player.Name;
+            set => _player.Name = value;
         }
 
-        public int Live => _live;
-        public int Money => _money;
-        public int Hungry => _hungry;
-        public int Sleep => _sleep;
-        public int Happiness => _happiness;
-        public int Purity => _purity;
-        public bool Alive => _isAlive;
+        public int Live => _player.Live;
+        public int Money => _player.Money;
+        public int Hungry => _player.Hungry;
+        public int Sleep => _player.Sleep;
+        public int Happiness => _player.Happiness;
+        public int Purity => _player.Purity;
+        public bool Alive => _player.IsAlive;
 
 
         /// <summary>
@@ -95,8 +63,8 @@ namespace bieda_simsy.GameMechanics
         public string SetName()
         {
             Console.Write("Enter your name: ");
-            _name = Console.ReadLine() ?? "Unnamed";
-            return _name;
+            _player.Name = Console.ReadLine() ?? "Unnamed";
+            return _player.Name;
         }
 
         /// <summary>
@@ -104,14 +72,9 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void SetName(string name)
         {
-            if (!string.IsNullOrEmpty(name))
-            {
-                _name = name;
-            }
-            else
-            {
-                _name = "Unnamed";
-            }
+            _player.Name = string.IsNullOrEmpty(name)
+                ? "Unnamed"
+                : name;
         }
 
         /// <summary>
@@ -119,7 +82,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void DecayStats(bool isAlive, int happiness, int hungry, int sleep, int purity)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
@@ -127,17 +90,17 @@ namespace bieda_simsy.GameMechanics
 
             int decayValue = 5;
 
-            _happiness = _modifier.OddStats(_happiness, decayValue);
-            _hungry = _modifier.OddStats(_hungry, decayValue);
-            _sleep = _modifier.OddStats(_sleep, decayValue);
-            _purity = _modifier.OddStats(_purity, decayValue);
+            _player.Happiness = _modifier.OddStats(_player.Happiness, decayValue);
+            _player.Hungry= _modifier.OddStats(_player.Hungry, decayValue);
+            _player.Sleep = _modifier.OddStats(_player.Sleep, decayValue);
+            _player.Purity = _modifier.OddStats(_player.Purity, decayValue);
 
-            _live = _modifier.LiveChanged(_happiness, _hungry, _sleep, _live, _purity);
+            _player.Live = _modifier.LiveChanged(_player);
 
-            if (_modifier.IsDead(_live))
+            if (_modifier.IsDead(_player.Live))
             {
-                _isAlive = false;
-                Console.WriteLine($"\n{_name} is critically ill!");
+                _player.IsAlive = false;
+                Console.WriteLine($"\n{_player.Name} is critically ill!");
             }
         }
 
@@ -147,17 +110,17 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void PlayWith(int value)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
             }
 
             Console.Clear();
-            int oldHappiness = _happiness;
-            _happiness = _modifier.AddStats(_happiness, value);
-            int happinessGained = _happiness - oldHappiness;
-            Console.WriteLine($"You played with {_name}. Happiness increased by {happinessGained}");
+            int oldHappiness = _player.Happiness;
+            _player.Happiness = _modifier.AddStats(_player.Happiness, value);
+            int happinessGained = _player.Happiness - oldHappiness;
+            Console.WriteLine($"You played with {_player.Name}. Happiness increased by {happinessGained}");
 
             PostAction();
         }
@@ -167,17 +130,17 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void Feed(int value)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
             }
 
             Console.Clear();
-            int oldHungry = _hungry;
-            _hungry = _modifier.AddStats(_hungry, value);
-            int hungryGained = _hungry - oldHungry;
-            Console.WriteLine($"You fed {_name}. Hunger increased by {hungryGained}");
+            int oldHungry = _player.Hungry;
+            _player.Hungry = _modifier.AddStats(_player.Hungry, value);
+            int hungryGained = _player.Hungry - oldHungry;
+            Console.WriteLine($"You fed {_player.Name}. Hunger increased by {hungryGained}");
             PostAction();
         }
 
@@ -186,7 +149,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void YouMustWork(int value)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
@@ -195,24 +158,24 @@ namespace bieda_simsy.GameMechanics
             Console.Clear();
 
             int moneyFromWork = _modifier.AddOddMoney();
-            int oldHappiness = _happiness;
-            int oldHungry = _hungry;
-            int oldSleep = _sleep;
-            int oldPurity = _purity;
+            int oldHappiness = _player.Happiness;
+            int oldHungry = _player.Hungry;
+            int oldSleep = _player.Sleep;
+            int oldPurity = _player.Purity;
 
-            _money += moneyFromWork;
+            _player.Money += moneyFromWork;
 
-            _happiness = _modifier.OddStats(_happiness, value);
-            _hungry = _modifier.OddStats(_hungry, value);
-            _sleep = _modifier.OddStats(_sleep, value);
-            _purity = _modifier.OddStats(_purity, value);
+            _player.Happiness = _modifier.OddStats(_player.Happiness, value);
+            _player.Hungry = _modifier.OddStats(_player.Hungry, value);
+            _player.Sleep = _modifier.OddStats(_player.Sleep, value);
+            _player.Purity = _modifier.OddStats(_player.Purity, value);
 
-            Console.WriteLine($"You worked and earned {moneyFromWork} money. Current money: {_money}");
+            Console.WriteLine($"You worked and earned {moneyFromWork} money. Current money: {_player.Money}");
             Console.WriteLine($"But work is exhausting and you have:");
-            Console.WriteLine($" {_name} has lost {oldHappiness - _happiness} happiness,\n " +
-                              $"{oldHungry - _hungry} hunger,\n " +
-                              $"{oldSleep - _sleep} sleep,\n " +
-                              $"{oldPurity - _purity} purity.");
+            Console.WriteLine($" {_player.Name} has lost {oldHappiness - _player.Happiness} happiness,\n " +
+                              $"{oldHungry - _player.Hungry} hunger,\n " +
+                              $"{oldSleep - _player.Sleep} sleep,\n " +
+                              $"{oldPurity - _player.Purity} purity.");
 
             PostAction();
         }
@@ -222,10 +185,10 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyFood(string itemName, int choice, int price, int value)
         {
-            CanIByu(_money, price);
-            _money = _modifier.PayForSomething(_money, price);
-            _hungry = _modifier.AddStats(_hungry, value);
-            Console.WriteLine($"You bought {itemName}. {_name} now has {_hungry} hunger");
+            CanIByu(_player.Money, price);
+            _player.Money = _modifier.PayForSomething(_player.Money, price);
+            _player.Hungry = _modifier.AddStats(_player.Hungry, value);
+            Console.WriteLine($"You bought {itemName}. {_player.Name} now has {_player.Hungry} hunger");
             PostAction();
         }
 
@@ -234,9 +197,9 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyHappiness(string itemName, int choice, int price, int value)
         {
-            CanIByu(_money, price);
-            _happiness = _modifier.AddStats(_happiness, value);
-            Console.WriteLine($"You bought {itemName}. {_name} now has {_happiness} happiness");
+            CanIByu(_player.Money, price);
+            _player.Happiness = _modifier.AddStats(_player.Happiness, value);
+            Console.WriteLine($"You bought {itemName}. {_player.Name} now has {_player.Happiness} happiness");
             PostAction();
         }
 
@@ -245,9 +208,9 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuySleep(string itemName, int choice, int price, int value)
         {
-            CanIByu(_money, price);
-            _sleep = _modifier.AddStats(_sleep, value);
-            Console.WriteLine($"You bought {itemName}. {_name} now has {_sleep} energy");
+            CanIByu(_player.Money, price);
+            _player.Sleep = _modifier.AddStats(_player.Sleep, value);
+            Console.WriteLine($"You bought {itemName}. {_player.Name} now has {_player.Sleep} energy");
             PostAction();
         }
 
@@ -256,9 +219,9 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void BuyPurity(string itemName, int choice, int price, int value)
         {
-            CanIByu(_money, price);
-            _purity = _modifier.AddStats(_purity, value);
-            Console.WriteLine($"You bought {itemName}. {_name} now has {_purity} purity");
+            CanIByu(_player.Money, price);
+            _player.Purity = _modifier.AddStats(_player.Purity, value);
+            Console.WriteLine($"You bought {itemName}. {_player.Name} now has {_player.Purity} purity");
             PostAction();
         }
 
@@ -267,7 +230,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void GoToSleep(int value)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
@@ -275,9 +238,9 @@ namespace bieda_simsy.GameMechanics
 
             Console.Clear();
 
-            int oldSleep = _sleep;
-            _sleep = _modifier.AddStats(_sleep, value);
-            int sleepGained = _sleep - oldSleep;
+            int oldSleep = _player.Sleep;
+            _player.Sleep = _modifier.AddStats(_player.Sleep, value);
+            int sleepGained = _player.Sleep - oldSleep;
             Console.WriteLine($"You slept. Sleep increased by {sleepGained}");
 
             PostAction();
@@ -288,7 +251,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void WashYourself(int value)
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
@@ -296,9 +259,9 @@ namespace bieda_simsy.GameMechanics
 
             Console.Clear();
 
-            int oldPurity = _purity;
-            _purity = _modifier.AddStats(_purity, value);
-            int purityGained = _purity - oldPurity;
+            int oldPurity = _player.Purity;
+            _player.Purity = _modifier.AddStats(_player.Purity, value);
+            int purityGained = _player.Purity - oldPurity;
             Console.WriteLine($"You washed yourself. Purity increased by {purityGained}");
 
             PostAction();
@@ -309,19 +272,20 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void MustPayTax()
         {
-            if (!_isAlive)
+            if (!_player.IsAlive)
             {
                 ShowDeadScreen();
                 return;
             }
 
-            if (_actionToBill >= 5)
+
+            if (_player.ActionToBill >= 5)
             {
                 int tax = _modifier.AddOddMoney();
-                CanIByu(_money, tax);
+                CanIByu(_player.Money, tax);
                 Console.WriteLine($"You must pay tax - {tax} coins");
-                _money = _modifier.PayForSomething(_money, tax);
-                _actionToBill = 0;
+                _player.Money  = _modifier.PayForSomething(_player.Money, tax);
+                _player.ActionToBill = 0;
             }
         }
 
@@ -331,14 +295,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void LoadData(Dictionary<string, object> data)
         {
-            _name = data["name"]?.ToString() ?? "Unnamed";
-            _live = Convert.ToInt32(data["live"]);
-            _money = Convert.ToInt32(data["money"]);
-            _happiness = Convert.ToInt32(data["happiness"]);
-            _hungry = Convert.ToInt32(data["hungry"]);
-            _sleep = Convert.ToInt32(data["sleep"]);
-            _purity = Convert.ToInt32(data["purity"]);
-            _isAlive = Convert.ToBoolean(data["isAlive"]);
+            _player.LoadData(data);
         }
 
         /// <summary>
@@ -346,17 +303,7 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public Dictionary<string, object> GetData()
         {
-            return new Dictionary<string, object>
-            {
-                { "name", _name },
-                { "live", _live },
-                { "money", _money },
-                { "happiness", _happiness },
-                { "hungry", _hungry },
-                { "sleep", _sleep },
-                { "purity", _purity },
-                { "isAlive", _isAlive }
-            };
+            return _player.GetData();
         }
 
         /// <summary>
@@ -365,45 +312,14 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         protected void GenerateRandomEvent()
         {
-            Random random = new Random();
-            EventEnum eventEnum = (EventEnum)random.Next(1, 3);
             RandomEvent randomEvent = new RandomEvent();
-            Dictionary<string, int> eventResults;
-
-            switch (eventEnum)
-            {
-                case EventEnum.GoodEvent:
-                    eventResults = randomEvent.GenerateEvent(eventEnum, _live, _money, _happiness, _hungry, _sleep, _purity, _name);
-                    ApplyEventsResoult(eventResults);
-                    break;
-                case EventEnum.BadEvent:
-                    eventResults = randomEvent.GenerateEvent(eventEnum, _live, _money, _happiness, _hungry, _sleep, _purity, _name);
-                    ApplyEventsResoult(eventResults);
-                    break;
-                default:
-                    return;
-            }
+            randomEvent.GenerateEvent(_player);
         }
 
         /// <summary>
         /// Updates the player's statistics based on the results of the event, 
         /// trimming the values to an acceptable range. 
         /// </summary>
-        private void ApplyEventsResoult(Dictionary<string, int> eventResults)
-        {
-            if (eventResults.ContainsKey("live"))
-                _live = _modifier.ClampStat(eventResults["live"]);
-            if (eventResults.ContainsKey("happiness"))
-                _happiness = _modifier.ClampStat(eventResults["happiness"]);
-            if (eventResults.ContainsKey("hungry"))
-                _hungry = _modifier.ClampStat(eventResults["hungry"]);
-            if (eventResults.ContainsKey("sleep"))
-                _sleep = _modifier.ClampStat(eventResults["sleep"]);
-            if (eventResults.ContainsKey("purity"))
-                _purity = _modifier.ClampStat(eventResults["purity"]);
-            if (eventResults.ContainsKey("money"))
-                _money = Math.Max(0, eventResults["money"]);
-        }
 
 
         /// <summary>
@@ -414,7 +330,7 @@ namespace bieda_simsy.GameMechanics
         private void PostAction()
         {
             GenerateRandomEvent();
-            _actionToBill++;
+            _player.ActionToBill++;
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
@@ -438,10 +354,10 @@ namespace bieda_simsy.GameMechanics
         {
             Console.Clear();
             Console.WriteLine("<---- GAME OVER ---->");
-            Console.WriteLine($"{_name} has died...");
+            Console.WriteLine($"{_player.Name} has died...");
             Console.WriteLine($"Final Stats");
-            Console.WriteLine($"Money: {_money}");
-            Console.WriteLine($"Days survived: {Math.Ceiling((decimal)_actionToBill / 5)}");
+            Console.WriteLine($"Money: {_player.Money}");
+            Console.WriteLine($"Days survived: {Math.Ceiling((decimal)_player.ActionToBill / 5)}");
         }
     }
 }

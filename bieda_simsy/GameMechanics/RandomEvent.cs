@@ -1,8 +1,5 @@
-﻿using bieda_simsy.GameMechanics.Abstract;
-using bieda_simsy.GameMechanics.Enums;
-using bieda_simsy.GameMechanics.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using bieda_simsy.GameMechanics.Enums;
+using bieda_simsy.GameMechanics.Models;
 
 namespace bieda_simsy.GameMechanics
 {
@@ -19,45 +16,27 @@ namespace bieda_simsy.GameMechanics
         /// <summary>
         /// creates and processes a random event (good or bad) that modifies the player's statistics.
         /// </summary>
-        public Dictionary<string, int> GenerateEvent(
-            EventEnum eventType,
-            int live,
-            int money,
-            int happiness,
-            int hungry,
-            int sleep,
-            int purity,
-            string name
-            )
+        public void GenerateEvent(Player player)
         {
-            var results = new Dictionary<string, int>
-            {
-                {"live", live},
-                {"money", money},
-                {"happiness", happiness},
-                {"hungry", hungry},
-                {"sleep", sleep},
-                {"purity", purity}
-            };
+            EventEnum eventType = (EventEnum)_random.Next(1,4);
 
             switch (eventType)
             {
                 case EventEnum.GoodEvent:
-                    GoodEvent(results, name);
+                    GoodEvent(player);
                     break;
-
                 case EventEnum.BadEvent:
-                    BadEvent(results, name);
+                    BadEvent(player);
+                    break;
+                case EventEnum.NoEvent:
                     break;
             }
-
-            return results;
         }
 
         /// <summary>
         /// increases random ststistics
         /// </summary>
-        private void GoodEvent(Dictionary<string, int> results, string name)
+        private void GoodEvent(Player player)
         {
             int change = _random.Next(1, 11);
             int random = _random.Next(1, 7);
@@ -65,34 +44,47 @@ namespace bieda_simsy.GameMechanics
             
             switch (random)
             {
-                case 1: 
-                    results["happiness"] = _modifier.AddStats(results["happiness"], change);
-                    Console.WriteLine($"\n{name} is happy today.\n+{change} happiness\n");
+                case 1:
+                    int oldHappiness = player.Happiness;
+                    player.Happiness = _modifier.AddStats(player.Happiness, change);
+                    int happinessGained = player.Happiness - oldHappiness;
+                    Console.WriteLine($"\n{player.Name} is happy today.\n+{happinessGained} happiness\n");
                     break;
-                case 2: 
-                    results["hungry"] = _modifier.AddStats(results["hungry"], change);
-                    Console.WriteLine($"\n{name} enjoyed the food.\n+{change} hungry\n");
+
+                case 2:
+                    int oldHungry = player.Hungry;
+                    player.Hungry = _modifier.AddStats(player.Hungry, change);
+                    int hungryGained = player.Hungry - oldHungry;
+                    Console.WriteLine($"\n{player.Name} enjoyed the food.\n+{hungryGained} hungry\n");
                     break;
+
                 case 3:
                     int bonusMoney = _modifier.AddOddMoney();
-                    results["money"] += bonusMoney;
-                    Console.WriteLine($"\n{name} boss is nice, send extra money.\n+{bonusMoney} coins\n");
+                    player.Money += bonusMoney;
+                    Console.WriteLine($"\n{player.Name} boss is nice, send extra money.\n+{bonusMoney} coins\n");
                     break;
+
                 case 4:
-                    results["sleep"] = _modifier.AddStats(results["sleep"], change);
-                    Console.WriteLine($"\n{name} have a good dream.\n+{change} sleep\n");
+                    int oldSleep = player.Sleep;
+                    player.Sleep = _modifier.AddStats(player.Sleep, change);
+                    int sleepGained = player.Sleep - oldSleep;
+                    Console.WriteLine($"\n{player.Name} have a good dream.\n+{sleepGained} sleep\n");
                     break;
 
                 case 5:
-                    results["purity"] = _modifier.AddStats(results["purity"], change);
-                    Console.WriteLine($"\n{name} think is a cat.\n+{change} purity\n");
+                    int oldPurity = player.Purity;
+                    player.Purity = _modifier.AddStats(player.Purity, change);
+                    int purityGained = player.Purity - oldPurity;
+                    Console.WriteLine($"\n{player.Name} think is a cat.\n+{purityGained} purity\n");
                     break;
 
                 case 6:
                     int refund = _random.Next(5, 12);
-                    results["money"] += refund;
-                    results["happiness"] = _modifier.AddStats(results["happiness"], change / 2);
-                    Console.WriteLine($"{name} found monety in the floor.\n+{refund} coins\n+{change} happiness");
+                    player.Money += refund;
+                    int oldHappiness2 = player.Happiness;
+                    player.Happiness = _modifier.AddStats(player.Happiness, change / 2);
+                    int happinessGained2 = player.Happiness - oldHappiness2;
+                    Console.WriteLine($"{player.Name} found money on the floor.\n+{refund} coins\n+{happinessGained2} happiness");
                     break;
             }
         }
@@ -100,7 +92,7 @@ namespace bieda_simsy.GameMechanics
         /// <summary>
         /// reduces the random ststistics
         /// </summary>
-        private void BadEvent(Dictionary<string, int> results, string name)
+        private void BadEvent(Player player)
         {
             int change = _random.Next(1, 11);
             int change2 = _random.Next(1, 11);
@@ -109,33 +101,49 @@ namespace bieda_simsy.GameMechanics
             switch (random)
             {
                 case 1:
-                    results["happiness"] = _modifier.OddStats(results["happiness"], change);
-                    results["live"] = _modifier.OddStats(results["live"], change2);
-                    Console.WriteLine($"\n{name} struck out .\n+{change} happiness\n-{change2} live");
+                    int oldHappiness = player.Happiness;
+                    int oldLive = player.Live;
+                    player.Happiness = _modifier.OddStats(player.Happiness, change);
+                    player.Live = _modifier.OddStats(player.Live, change2);
+                    int happinessLost = oldHappiness - player.Happiness;
+                    int liveLost = oldLive - player.Live;
+                    Console.WriteLine($"\n{player.Name} struck out.\n-{happinessLost} happiness\n-{liveLost} live");
                     break;
+
                 case 2:
-                    results["hungry"] = _modifier.OddStats(results["hungry"], change);
-                    Console.WriteLine($"\n{name} found a food in floor.\n-{change} hungry\n");
+                    int oldHungry = player.Hungry;
+                    player.Hungry = _modifier.OddStats(player.Hungry, change);
+                    int hungryLost = oldHungry - player.Hungry;
+                    Console.WriteLine($"\n{player.Name} found a food on floor.\n-{hungryLost} hungry\n");
                     break;
+
                 case 3:
-                    int bonusMoney = _modifier.AddOddMoney();
-                    results["money"] -= bonusMoney;
-                    Console.WriteLine($"\n{name} have extra bill .\n-{bonusMoney} coins\n");
+                    int bill = _modifier.AddOddMoney();
+                    player.Money = Math.Max(0, player.Money - bill);
+                    Console.WriteLine($"\n{player.Name} have extra bill.\n-{bill} coins\n");
                     break;
+
                 case 4:
-                    results["sleep"] = _modifier.OddStats(results["sleep"], change);
-                    Console.WriteLine($"\n{name} have a nightmare.\n-{change} sleep\n");
+                    int oldSleep = player.Sleep;
+                    player.Sleep = _modifier.OddStats(player.Sleep, change);
+                    int sleepLost = oldSleep - player.Sleep;
+                    Console.WriteLine($"\n{player.Name} have a nightmare.\n-{sleepLost} sleep\n");
                     break;
 
                 case 5:
-                    results["purity"] = _modifier.OddStats(results["purity"], change);
-                    Console.WriteLine($"\n{name} make a Nurgle poop.\n-{change} purity\n");
+                    int oldPurity = player.Purity;
+                    player.Purity = _modifier.OddStats(player.Purity, change);
+                    int purityLost = oldPurity - player.Purity;
+                    Console.WriteLine($"\n{player.Name} make a Nurgle poop.\n-{purityLost} purity\n");
                     break;
+
                 case 6:
-                    int refund = _random.Next(5, 12);
-                    results["money"] -= refund;
-                    results["happiness"] = _modifier.OddStats(results["happiness"], change / 2);
-                    Console.WriteLine($"{name} was robbed by robber poop.\n-{refund} coins\n-{change} happiness");
+                    int stolen = _random.Next(5, 12);
+                    player.Money = Math.Max(0, player.Money - stolen);
+                    int oldHappiness2 = player.Happiness;
+                    player.Happiness = _modifier.OddStats(player.Happiness, change / 2);
+                    int happinessLost2 = oldHappiness2 - player.Happiness;
+                    Console.WriteLine($"{player.Name} was robbed by robber poop.\n-{stolen} coins\n-{happinessLost2} happiness");
                     break;
             }
         }

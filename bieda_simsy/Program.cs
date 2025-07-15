@@ -1,5 +1,4 @@
-﻿using bieda_simsy;
-using bieda_simsy.GameMechanics;
+﻿using bieda_simsy.GameMechanics;
 using bieda_simsy.GameMechanics.Settings;
 using System.Text.Json;
 

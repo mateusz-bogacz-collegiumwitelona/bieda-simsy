@@ -1,4 +1,6 @@
-﻿namespace bieda_simsy.GameMechanics.Interfaces
+﻿using bieda_simsy.GameMechanics.Models;
+
+namespace bieda_simsy.GameMechanics.Interfaces
 {
     /// <summary>
     /// interface to stats modifier functions
@@ -8,7 +10,7 @@
         int AddStats(int stats, int value);
         int OddStats(int stats, int value);
         int AddOddMoney();
-        int LiveChanged(int happiness, int hungry, int sleep, int currentLive, int purity);
+        int LiveChanged(Player player);
         int PayForSomething(int money, int cost);
         bool CanAfford(int money, int cost);
         bool IsDead(int life);

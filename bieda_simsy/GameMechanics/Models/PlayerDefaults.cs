@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bieda_simsy.GameMechanics.Models
+﻿namespace bieda_simsy.GameMechanics.Models
 {
     /// <summary>
     /// default player stats

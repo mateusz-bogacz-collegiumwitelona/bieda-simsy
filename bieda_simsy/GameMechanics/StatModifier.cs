@@ -1,6 +1,7 @@
 ﻿using bieda_simsy.GameMechanics.Interfaces;
+using bieda_simsy.GameMechanics.Models;
 
-namespace bieda_simsy.GameMechanics.Abstract
+namespace bieda_simsy.GameMechanics
 {
     internal class StatModifier : IStatsModifier
     {
@@ -28,42 +29,54 @@ namespace bieda_simsy.GameMechanics.Abstract
         /// changes life points according to the number of stats at minus or plus
         /// </summary>
         /// <returns></returns>
-        public int LiveChanged(
-            int happiness, 
-            int hungry, 
-            int sleep,
-            int currentLive,
-            int purity
-            )
+        public int LiveChanged( Player player)
         {
-            if (happiness <= 0 || hungry <= 0 || sleep <= 0 || purity <= 0)
+            if (player.Happiness <= 0 || player.Hungry <= 0 || player.Sleep <= 0 || player.Purity <= 0)
             {
                 int lifeLoss = _random.Next(1, 6);
 
-                if (happiness <= 0 && hungry <= 0)
+                if (player.Happiness <= 0 && player.Hungry <= 0)
                 {
                     lifeLoss *= 2;
                 }
 
-                if (happiness <= 0 && hungry <= 0 && sleep <= 0)
+                if (player.Happiness <= 0 && player.Hungry <= 0 && player.Sleep <= 0)
                 {
                     lifeLoss *= 3;
                 }
 
-                if (happiness <= 0 && hungry <= 0 && sleep <= 0 && purity <= 0)
+                if (player.Happiness <= 0 && player.Hungry <= 0 && player.Sleep <= 0 && player.Purity <= 0)
                 {
                     lifeLoss *= 5;
                 }
 
-                return Math.Max(0, currentLive - lifeLoss);
+                return Math.Max(0, player.Live - lifeLoss);
             }
-            else if (happiness == 100 && hungry == 100 && sleep == 100 && purity == 100)
+            else if (player.Happiness >= 0 || player.Hungry >= 0 || player.Sleep >= 0 || player.Purity >= 0)
             {
                 int lifeGain = _random.Next(1, 6);
-                return Math.Min(100, currentLive + lifeGain);
+
+                if (player.Happiness >= 0 && player.Hungry >= 0)
+                {
+                    lifeGain *= 2;
+                }
+
+                if (player.Happiness >= 0 && player.Hungry >= 0 && player.Sleep >= 0)
+                {
+                    lifeGain *= 3;
+                }
+
+                if (player.Happiness >= 0 && player.Hungry <= 0 && player.Sleep >= 0 && player.Purity >= 0)
+                {
+                    lifeGain *= 5;
+                }
+
+
+               
+                return Math.Min(100, player.Live + lifeGain);
             }
 
-            return currentLive;
+            return player.Live;
         }
 
         /// <summary>
@@ -86,5 +99,15 @@ namespace bieda_simsy.GameMechanics.Abstract
         /// limits the value of the statistic to the range of 0-100.
         /// </summary>
         public int ClampStat(int value) => Math.Clamp(value, MIN_STAT, MAX_STAT);
+
+        public void ApplyEventResults(Player player, Player eventResults)
+        {
+            player.Live = ClampStat(eventResults.Live);
+            player.Happiness = ClampStat(eventResults.Happiness);
+            player.Hungry = ClampStat(eventResults.Hungry);
+            player.Sleep = ClampStat(eventResults.Sleep);
+            player.Purity = ClampStat(eventResults.Purity);
+            player.Money = Math.Max(0, eventResults.Money);
+        }
     }
 }

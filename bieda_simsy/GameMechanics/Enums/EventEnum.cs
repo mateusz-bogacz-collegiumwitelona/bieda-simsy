@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bieda_simsy.GameMechanics.Enums
+﻿namespace bieda_simsy.GameMechanics.Enums
 {
     /// <summary>
     /// type of random events
@@ -12,6 +6,7 @@ namespace bieda_simsy.GameMechanics.Enums
     internal enum EventEnum
     {
         GoodEvent = 1 ,
-        BadEvent = 2 
+        BadEvent = 2,
+        NoEvent = 3,
     }
 }
