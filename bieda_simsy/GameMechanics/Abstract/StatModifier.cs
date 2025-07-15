@@ -2,7 +2,7 @@
 
 namespace bieda_simsy.GameMechanics.Abstract
 {
-    internal abstract class StatModifier : IStatsModifier
+    internal class StatModifier : IStatsModifier
     {
         private readonly Random _random = new Random();
         private const int MAX_STAT = 100; // max value of stats
@@ -85,6 +85,6 @@ namespace bieda_simsy.GameMechanics.Abstract
         /// <summary>
         /// limits the value of the statistic to the range of 0-100.
         /// </summary>
-        protected int ClampStat(int value) => Math.Clamp(value, MIN_STAT, MAX_STAT);
+        public int ClampStat(int value) => Math.Clamp(value, MIN_STAT, MAX_STAT);
     }
 }

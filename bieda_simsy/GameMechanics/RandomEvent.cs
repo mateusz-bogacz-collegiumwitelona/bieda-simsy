@@ -6,9 +6,15 @@ using System.Collections.Generic;
 
 namespace bieda_simsy.GameMechanics
 {
-    internal class RandomEvent : StatModifier
+    internal class RandomEvent 
     {
         private static Random _random = new Random();
+        private StatModifier _modifier;
+
+        public RandomEvent()
+        {
+            _modifier = new StatModifier();
+        }
 
         /// <summary>
         /// creates and processes a random event (good or bad) that modifies the player's statistics.
@@ -60,32 +66,32 @@ namespace bieda_simsy.GameMechanics
             switch (random)
             {
                 case 1: 
-                    results["happiness"] = AddStats(results["happiness"], change);
+                    results["happiness"] = _modifier.AddStats(results["happiness"], change);
                     Console.WriteLine($"\n{name} is happy today.\n+{change} happiness\n");
                     break;
                 case 2: 
-                    results["hungry"] = AddStats(results["hungry"], change);
+                    results["hungry"] = _modifier.AddStats(results["hungry"], change);
                     Console.WriteLine($"\n{name} enjoyed the food.\n+{change} hungry\n");
                     break;
                 case 3:
-                    int bonusMoney = AddOddMoney();
+                    int bonusMoney = _modifier.AddOddMoney();
                     results["money"] += bonusMoney;
                     Console.WriteLine($"\n{name} boss is nice, send extra money.\n+{bonusMoney} coins\n");
                     break;
                 case 4:
-                    results["sleep"] = AddStats(results["sleep"], change);
+                    results["sleep"] = _modifier.AddStats(results["sleep"], change);
                     Console.WriteLine($"\n{name} have a good dream.\n+{change} sleep\n");
                     break;
 
                 case 5:
-                    results["purity"] = AddStats(results["purity"], change);
+                    results["purity"] = _modifier.AddStats(results["purity"], change);
                     Console.WriteLine($"\n{name} think is a cat.\n+{change} purity\n");
                     break;
 
                 case 6:
                     int refund = _random.Next(5, 12);
                     results["money"] += refund;
-                    results["happiness"] = AddStats(results["happiness"], change / 2);
+                    results["happiness"] = _modifier.AddStats(results["happiness"], change / 2);
                     Console.WriteLine($"{name} found monety in the floor.\n+{refund} coins\n+{change} happiness");
                     break;
             }
@@ -103,32 +109,32 @@ namespace bieda_simsy.GameMechanics
             switch (random)
             {
                 case 1:
-                    results["happiness"] = OddStats(results["happiness"], change);
-                    results["live"] = OddStats(results["live"], change2);
+                    results["happiness"] = _modifier.OddStats(results["happiness"], change);
+                    results["live"] = _modifier.OddStats(results["live"], change2);
                     Console.WriteLine($"\n{name} struck out .\n+{change} happiness\n-{change2} live");
                     break;
                 case 2:
-                    results["hungry"] = OddStats(results["hungry"], change);
+                    results["hungry"] = _modifier.OddStats(results["hungry"], change);
                     Console.WriteLine($"\n{name} found a food in floor.\n-{change} hungry\n");
                     break;
                 case 3:
-                    int bonusMoney = AddOddMoney();
+                    int bonusMoney = _modifier.AddOddMoney();
                     results["money"] -= bonusMoney;
                     Console.WriteLine($"\n{name} have extra bill .\n-{bonusMoney} coins\n");
                     break;
                 case 4:
-                    results["sleep"] = OddStats(results["sleep"], change);
+                    results["sleep"] = _modifier.OddStats(results["sleep"], change);
                     Console.WriteLine($"\n{name} have a nightmare.\n-{change} sleep\n");
                     break;
 
                 case 5:
-                    results["purity"] = OddStats(results["purity"], change);
+                    results["purity"] = _modifier.OddStats(results["purity"], change);
                     Console.WriteLine($"\n{name} make a Nurgle poop.\n-{change} purity\n");
                     break;
                 case 6:
                     int refund = _random.Next(5, 12);
                     results["money"] -= refund;
-                    results["happiness"] = AddStats(results["happiness"], change / 2);
+                    results["happiness"] = _modifier.OddStats(results["happiness"], change / 2);
                     Console.WriteLine($"{name} was robbed by robber poop.\n-{refund} coins\n-{change} happiness");
                     break;
             }

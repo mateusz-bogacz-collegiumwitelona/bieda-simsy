@@ -12,5 +12,6 @@
         int PayForSomething(int money, int cost);
         bool CanAfford(int money, int cost);
         bool IsDead(int life);
+        int ClampStat(int value);
     }
 }
