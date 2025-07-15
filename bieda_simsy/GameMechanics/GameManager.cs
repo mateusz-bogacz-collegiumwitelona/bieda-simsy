@@ -33,31 +33,37 @@ namespace bieda_simsy.GameMechanics
         /// </summary>
         public void SetupGame()
         {
-            Console.WriteLine(">> SetupGame started");
-            ShowMainMenu();
-
-            string input = Console.ReadLine();
-
-            MainMenuOption option = ParseMenuOption(input);
-
-
-            switch (option)
+            while (true)
             {
-                case MainMenuOption.NewGame:
-                    StartNewGame();
-                    Console.Clear();
-                    GameLoop();
-                    break;
-                case MainMenuOption.LoadGame:
-                    LoadGameMenu();
-                    break;
-                case MainMenuOption.Exit:
-                    Console.WriteLine("Exiting the game. Goodbye!");
-                    break;
-                case MainMenuOption.None:
-                default:
-                    Console.WriteLine("Are you an idiot? Wrong choice");
-                    break;
+                Console.WriteLine(">> SetupGame started");
+                ShowMainMenu();
+
+                string input = Console.ReadLine();
+
+                MainMenuOption option = ParseMenuOption(input);
+
+
+                switch (option)
+                {
+                    case MainMenuOption.NewGame:
+                        StartNewGame();
+                        Console.Clear();
+                        GameLoop();
+                        break;
+                    case MainMenuOption.LoadGame:
+                        LoadGameMenu();
+                        break;
+                    case MainMenuOption.Exit:
+                        Console.WriteLine("Exiting the game. Goodbye!");
+                        Environment.Exit(0);
+                        break;
+                    case MainMenuOption.None:
+                    default:
+                        Console.WriteLine("Are you an idiot? Wrong choice");
+                        Console.ReadKey();
+                        SetupGame();
+                        break;
+                }
             }
         }
 
@@ -124,6 +130,7 @@ namespace bieda_simsy.GameMechanics
                 Console.WriteLine("No saves found");
                 Console.WriteLine("Press any key to return to the main menu.");
                 Console.ReadKey();
+                SetupGame();
                 return;
             }
 
@@ -158,6 +165,7 @@ namespace bieda_simsy.GameMechanics
                 Console.WriteLine("Invalid choice. Please try again.");
                 Console.WriteLine("Press any key to return to the main menu.");
                 Console.ReadKey();
+                SetupGame();
             }
         }
 
